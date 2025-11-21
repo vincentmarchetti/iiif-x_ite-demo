@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>X-ITE manifest viewer</title>
+    <meta name="generator" content="BBEdit 15.5">
+    
+    <!-- 
+    Dev Note 20 Nov 2025
+    This combination of loading the x_ite script not as module, and 
+    then loading the index.js code as a module with the defer attribute set,
+    is the combination that seems to let the "X3D" instance from X_ITE visible
+    to the code in index.js, even after bundling of the index.js code
+    -->
+    <script  defer src="https://cdn.jsdelivr.net/npm/x_ite@12.1.8/dist/x_ite.min.js"></script>
+    <script  type="module" defer src="index.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="index.css"></link>
+        
+
+</head>
+<body>
+<div id="main-title">
+Prototype IIIF Manifest Viewer with <a href="https://github.com/create3000/x_ite">X-ITE</a> X3D viewer
+</div>
+
+<div id="xite-view-container"></div>
+
+<div id="xite-control">
+<button name="show_all" type="button" id="xite-show-all">Show All</button>
+</div>
+
+<div id="credits">
+<a href="https://create3000.github.io/x_ite/"><img class="logo-image" id="xite-logo" alt="X-_TE logo" src="img/xite_logo.png"></a>
+<a href="https://iiif.io"><img class="logo-image" id="iiif-logo" alt="X-_TE logo" src="img/iiif_logo.png"></a>
+</div>
+</body>
+</html>

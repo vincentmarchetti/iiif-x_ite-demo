@@ -1,0 +1,18 @@
+{
+  "name": "iiif-x_ite-demo",
+  "version": "1.0.0",
+  "description": "prototype of a IIIF 3D manifest viewer using the X-ITE X3D viewer",
+  "author": "Vince Marchetti <vmarchetti@kshell.com>",
+  "type": "module",
+  "source": "src/index.html",
+  "scripts": {
+    "start": "parcel --open",
+    "build": "parcel build",
+    "clean": "rimraf --verbose dist .parcel-cache",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "parcel": "^2.16.1",
+    "rimraf": "^6.1.2"
+  }
+}
