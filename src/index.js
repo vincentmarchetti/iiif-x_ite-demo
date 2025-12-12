@@ -1,3 +1,6 @@
+const manifesto = require("@iiif/3d-manifesto-dev/dist-commonjs/");
+
+import {Manifest3DViewer} from "./Manifest3DViewer.ts";
 
 import {fetch_manifest_json} from "./fetch_manifest_json.ts";
 
@@ -8,56 +11,48 @@ async function handle_manifest_json( json ){
     with manifesto and announce that manifesto object through a 
     window based Custom event, which other parts of the page
     */
-    console.log(`handle_manifest_json: type is ${json.type}`);
+    console.debug(`handle_manifest_json: type is ${json.type}`);
+    
     // insert parsing with manifesto-3d and if successful
     // raise a custom event
+    const rv = new manifesto.Manifest(json, {});
+    document.dispatchEvent( new CustomEvent("new_manifest", { detail : {manifest : rv }}) );
     return;
 }
 
 
+function initialize_manifest_elements(){
+    const container = document.getElementById("xite-view-container");
+    if (container === null)
+        throw new Error("initialize_manifest_elements: getElementById(\"xite-view-container\") failed");
+        
+    document.addEventListener("new_manifest", async (event) => {        
+        console.log("new_manifest event fired");
+        const container = document.getElementById("xite-view-container");
+        const viewer = new Manifest3DViewer(container);
+        viewer.showAllButton = document.getElementById("xite-show-all");
+        await viewer.display( event.detail.manifest );
+    });    
+}
 
-async function  hook(event){
+
+async function  dom_loaded_viewer_handler(event){
     console.log("DOMContentLoaded fired");  
+    initialize_manifest_elements();
+    
     const data = await fetch_manifest_json(window.location);
-    console.log(`return : fetch_manifest_json( ${window.location} ) ==> ${data}`);
-    await handle_manifest_json( data );
-    //await show_stub_content();
+    if (data !== null){
+        console.log(`return : fetch_manifest_json( ${window.location} ) ==> ${data}`);
+        await handle_manifest_json( data );
+    }
+    else
+        console.log(`no manifest url identified in ${window.location}`);
 }
 
 function attach_window_listener(){
-    window.addEventListener("DOMContentLoaded", hook);
+    window.addEventListener("DOMContentLoaded", dom_loaded_viewer_handler);
     console.log("DOMContentLoaded listener added to window");
 }
 
-async function show_stub_content(){
-    /* 
-    this function is a stub to just show something
-    -- as specified by a url to a glb model
-    in the viewer; eventually this needs to be replaced
-    by the call that will cause a manifest to be rendered
-    by the viewer
-    */
-    const model_url = "https://spri-open-resources.s3.us-east-2.amazonaws.com/iiif3dtsg/woodblocks/redF.glb";    
-    const canvas = document.createElement("x3d-canvas");
-    const container = document.getElementById("xite-view-container");
-    container.appendChild(canvas);
-    
-    console.debug("created " + canvas.browser);
-    console.debug("X3D " + X3D );
-    // https://create3000.github.io/x_ite/accessing-the-external-browser/#pure-javascript
-    const scene = await canvas.browser.createScene();
-    console.debug("scene " + scene);
-    const inline = scene.createNode("Inline");
-    inline.url = new X3D.MFString([ model_url ]);
-    scene.rootNodes.push(inline);
-    
-    console.debug("loading scene");
-    await canvas.browser.replaceWorld(scene);  
-    console.log("scene replaced");
-    // following may not work because it is being called before
-    // the glb file is loaded
-    
-    canvas.browser.viewAll();
-}
 
 attach_window_listener();
