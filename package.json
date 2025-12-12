@@ -15,5 +15,8 @@
     "parcel": "^2.16.1",
     "rimraf": "^6.1.2",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@iiif/3d-manifesto-dev": "^0.6.1"
   }
 }
