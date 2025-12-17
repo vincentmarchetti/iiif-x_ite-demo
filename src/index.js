@@ -4,6 +4,18 @@ import {Manifest3DViewer} from "./Manifest3DViewer.ts";
 
 import {fetch_manifest_json} from "./fetch_manifest_json.ts";
 
+/*
+    handle_manifest_json is called when an object has
+    been parsed from manifest json text.
+    
+    It is intended to be defined in the global scope so that
+    it can be invoked dynamically over the course of a pages lifescycle,
+    such as 
+        -- on document loading, when a manifest is fetched from a url defined 
+           in window.location
+        -- on user request to fetch a manifest from a url entered into HTML input
+        -- on user request when manifest text is entered or copied into HTML input
+*/
 async function handle_manifest_json( json ){
     /*
     json is the object obtained from the json text 
@@ -20,7 +32,18 @@ async function handle_manifest_json( json ){
     return;
 }
 
+/*
+Following code in file defines actions triggered by DOMContentLoaded event
+*/
 
+/*
+Creates a Manifest3DViewer instance inside an existing HTMLElement identified
+by id xite-view-container
+    -- constructing this instance created both an HTML element with tag x3d-canvas
+    -- along with the X_ITE browser object
+    
+Then configures a handler to a custom event new_manifest fired from document    
+*/
 function initialize_manifest_elements(){
     const container = document.getElementById("xite-view-container");
     if (container === null)
@@ -35,12 +58,36 @@ function initialize_manifest_elements(){
     });    
 }
 
-
+/*
+    this handler invokes initialize_manifest_elements and then
+    attempts to load and render a manifest specified in a query string in 
+    window.location
+    
+    12/17/2025 : syle note: I have purposely broken this out
+    into named functions dom_loaded_viewer_handler and  attach_window_listener
+    for readability and flexibility in reconfiguring.
+*/
 async function  dom_loaded_viewer_handler(event){
     console.log("DOMContentLoaded fired");  
     initialize_manifest_elements();
     
-    const data = await fetch_manifest_json(window.location);
+    let data;
+    try{
+        data = await fetch_manifest_json(window.location);
+        if (data === null){
+            window.alert("No initial manifest url declared");
+            return;
+        }
+    } catch (error){
+        const message = ( (e) => {
+            if (e instanceof Error ) return e.message;
+            return String(e);
+        })(error);
+        window.alert(message);
+        console.error(message);
+        return;
+    }
+        
     if (data !== null){
         console.log(`return : fetch_manifest_json( ${window.location} ) ==> ${data}`);
         await handle_manifest_json( data );
