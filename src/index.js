@@ -1,7 +1,15 @@
+
+/*
+Developer note 12/17/2025 : manifesto is being brought in here
+for the purpose of allowing the function handle_manifest_json to
+construct an instance of manifesto.Manifest
+
+It is not intended to put manifesto or its contents into global scope
+but for all I know that's an unintended consequence.
+*/
 const manifesto = require("@iiif/3d-manifesto-dev/dist-commonjs/");
 
 import {Manifest3DViewer} from "./Manifest3DViewer.ts";
-
 import {fetch_manifest_json} from "./fetch_manifest_json.ts";
 
 /*
