@@ -1,0 +1,23 @@
+{
+  "name": "transforms",
+  "version": "1.0.0",
+  "description": "Code to translate IIIF Transform objects to X3D structures and perform calculations involving nested geometric transformations",
+  "keywords": [
+    "X3D",
+    "IIIF"
+  ],
+  "author": "Vincent Marchetti",
+  "type": "module",
+  "scripts": {
+    "test": "mocha",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "chai": "^6.2.1",
+    "mocha": "^11.7.5",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@iiif/3d-manifesto-dev": "^0.6.1"
+  }
+}
