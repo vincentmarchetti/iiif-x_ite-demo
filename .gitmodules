@@ -1,0 +1,3 @@
+[submodule "packages/manifesto-prezi4"]
+	path = packages/manifesto-prezi4
+	url = git@github.com:vincentmarchetti/manifesto-prezi4.git
