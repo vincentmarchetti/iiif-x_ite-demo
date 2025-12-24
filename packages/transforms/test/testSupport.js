@@ -1,4 +1,4 @@
-import {RotateTransform} from "@iiif/3d-manifesto-dev/dist-commonjs/index.js";
+import {RotateTransform} from "manifesto-prezi4/index.js";
 
 
 export function makeRotateTransform(xv,yv,zv){

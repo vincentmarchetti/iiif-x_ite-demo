@@ -1,4 +1,4 @@
-import * as manifesto from "@iiif/3d-manifesto-dev/dist-commonjs/index.js";
+import * as manifesto from "manifesto-prezi4/index.js";
 import {Quaternion, Euler,  IOrder, MathUtils, Vector3} from "threejs-math";
 
 
