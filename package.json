@@ -17,6 +17,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@iiif/3d-manifesto-dev": "^0.6.1"
+    "manifesto-prezi4": "file:./packages/manifesto-prezi4/dist-commonjs",
+    "threejs-math": "^0.147.0"
   }
 }
