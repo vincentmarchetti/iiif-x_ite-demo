@@ -1,0 +1,19 @@
+{
+  "name": "chai-transforms",
+  "version": "1.0.0",
+  "description": "Extension to chai supporting 'almost equal' testing of Vector3 and object supporting applyToVector3 methods",
+  "license": "ISC",
+  "author": "Vincent Marchetti",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "chai": "^6.2.2",
+    "chai-almost": "^1.0.1"
+  },
+  "devDependencies": {
+    "mocha": "^11.7.5"
+  }
+}
