@@ -1,4 +1,5 @@
 const type = require('type-detect')
+const Vector3 = require('threejs-math').Vector3;
 
 function isVector3(vect){
     for(let i = 0; i<3;++i){
@@ -92,6 +93,32 @@ function chaiTransforms () {
                                     `to not almost equal ${prettyVector(val)}}`;
                 return this.assert(testResult,message, neg_message);
             }
+        } else if (isAffineTransform(this._obj) && isAffineTransform(val)) {
+            const tolerance = utils.flag(this,"tolerance");
+            const useAlmost = (tolerance != undefined);
+            const cVs = [0.0,1.0];
+            for (let i = 0; i < 2; ++i)
+            for (let j = 0; j < 2; ++j)
+            for (let k = 0; k < 2; ++k){
+                const testVect = new Vector3(cVs[i] , cVs[j], cVs[k]);
+                const objVect = this._obj.applyToVector3( testVect );
+                const valVect = val.applyToVector3( testVect );
+                
+                const testRes = (useAlmost)?
+                                areAlmostEqualVector3s(objVect,valVect,tolerance):
+                                areEqualVector3s(objVect,valVect);
+                                
+                if (!testRes){
+                    message = (useAlmost)?
+                            `test ${prettyVector(testVect)} : ` +
+                            `expected ${prettyVector(objVect)} ` +
+                                    `to almost equal ${prettyVector(valVect)}`:
+                            "no implemented equal message yet";
+                            
+                    return this.assert(false, message);
+                }
+            }
+            return this.assert(true, "","all test vector comparisons almost equal");
         } else {
           return _super.apply(this, arguments)
         }
