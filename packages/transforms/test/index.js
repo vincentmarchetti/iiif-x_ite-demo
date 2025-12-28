@@ -1,7 +1,7 @@
 import {expect} from "chai";
 
 
-import {T} from "./testSupport.js";
+import {T} from "./support.js";
 import {Transform, transformsToPlacements} from "../dist-commonjs/index.js"
 
 
