@@ -14,5 +14,28 @@ function T(xv,yv,zv){
     return u;
 };
 
+function R(xv,yv,zv){
+    const jsonld = {
+        "type" : "RotateTransform",
+        "x"    : xv,
+        "y"    : yv,
+        "z"    : zv
+    };
+    const u =  new manifesto.RotateTransform(jsonld);
+    u.label = "R"
+    return u;
+};
 
-module.exports = {T};
+function S(xv,yv,zv){
+    const jsonld = {
+        "type" : "ScaleTransform",
+        "x"    : xv,
+        "y"    : yv,
+        "z"    : zv
+    };
+    const u =  new manifesto.ScaleTransform(jsonld);
+    u.label = "S"
+    return u;
+};
+
+module.exports = {S,R,T};

@@ -1,7 +1,7 @@
 import {expect} from "chai";
 
 
-import {T} from "./support.js";
+import {S,R,T} from "./support.js";
 import {Transform, transformsToPlacements} from "../dist-commonjs/index.js"
 
 
@@ -12,7 +12,7 @@ function labels(aList){
 describe("first test", function(){
     
     it("creates lists", () => {        
-        let transList = [T(1.0,2.0,3.0)];
+        let transList = [S(1,1,1),R(90,0,0),T(1.0,2.0,3.0)];
         expect(transList).to.exist;
         
         expect(labels(transList)).to.be.a('string');

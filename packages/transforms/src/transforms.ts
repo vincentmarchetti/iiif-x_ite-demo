@@ -52,6 +52,11 @@ export abstract class Transform{
             const coords:AxesValues = extractAxesValues(t, 0.0);
             return new Translation( new Vector3().fromArray(coords));
         }
+        
+        if (t instanceof manifesto.ScaleTransform ) {
+            const coords:AxesValues = extractAxesValues(t, 1.0);
+            return new Scaling( coords );
+        }
 
         throw new TypeError();
     }
