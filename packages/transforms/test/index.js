@@ -9,21 +9,27 @@ function labels(aList){
     return aList.reduce( (accum,t) => {return accum+t.label;},"[") + "]";
 }
 
-describe("first test", function(){
+const testCases = [
+        [S(1,1,1),R(90,0,0),T(1.0,2.0,3.0)],
+        [T(1.0,2.0,3.0),R(90,0,0),S(1,1,1)],
+        [T(1.0,2.0,3.0),R(90,0,0),R(0,45.0,0),S(1,1,1)]
+    ];
+
+describe(`test case`, function(){
+
     
-    it("creates lists", () => {        
-        let transList = [S(1,1,1),R(90,0,0),T(1.0,2.0,3.0)];
-        expect(transList).to.exist;
-        
-        expect(labels(transList)).to.be.a('string');
-        
-        let tlist = transList.map(Transform.from_manifesto_transform);
-        expect(tlist).to.be.a('array');
-        
-        let placements = transformsToPlacements(tlist);
-        expect(placements).to.be.a('array');
-        
-        expect(placements).to.almost.equal(tlist);
+    testCases.forEach( function(tc){
+        it(`test case ${labels(tc)}`, function(){        
+            let manifestoList = tc;
+            
+            let transformsList = manifestoList.map(Transform.from_manifesto_transform);
+            expect(transformsList).to.be.a('array');
+            
+            let placements = transformsToPlacements(transformsList);
+            expect(placements).to.be.a('array');
+            
+            expect(placements).to.almost.equal(transformsList);
+        });
     });
 });
 
