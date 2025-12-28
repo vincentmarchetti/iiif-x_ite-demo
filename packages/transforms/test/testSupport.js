@@ -1,8 +1,8 @@
-import * as manifesto from "manifesto-prezi4/index.js";
+const manifesto = require( "manifesto-prezi4/index.js");
 
 
 
-export function T(xv,yv,zv){
+function T(xv,yv,zv){
     const jsonld = {
         "type" : "TranslateTransform",
         "x"    : xv,
@@ -15,3 +15,4 @@ export function T(xv,yv,zv){
 };
 
 
+module.exports = {T};
