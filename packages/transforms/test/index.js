@@ -1,6 +1,8 @@
 import {T} from "./testSupport.js";
 import {Transform, transformsToPlacements} from "../dist/index.js"
-import {expect} from "chai";
+import * as chai from "chai";
+
+let expect = chai.expect;
 
 function labels(aList){
     return aList.reduce( (accum,t) => {return accum+t.label;},"[") + "]";
