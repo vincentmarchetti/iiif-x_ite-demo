@@ -7,7 +7,7 @@ construct an instance of manifesto.Manifest
 It is not intended to put manifesto or its contents into global scope
 but for all I know that's an unintended consequence.
 */
-const manifesto = require("@iiif/3d-manifesto-dev/dist-commonjs/");
+const manifesto = require("manifesto-prezi4");
 
 import {Manifest3DViewer} from "./Manifest3DViewer.ts";
 import {fetch_manifest_json} from "./fetch_manifest_json.ts";
