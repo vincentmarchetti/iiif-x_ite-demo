@@ -7,10 +7,10 @@
     "IIIF"
   ],
   "author": "Vincent Marchetti",
-  "type": "module",
   "scripts": {
-    "test": "mocha",
-    "build": "tsc"
+    "test": "npm run build:commonjs ; mocha  --require ./test/setup.js",
+    "build": "tsc",
+    "build:commonjs": "tsc --module commonjs --outDir dist-commonjs"
   },
   "devDependencies": {
     "chai": "^6.2.1",
