@@ -14,9 +14,8 @@
   },
   "devDependencies": {
     "chai": "^6.2.1",
+    "chai-almost": "^1.0.1",
     "mocha": "^11.7.5",
     "typescript": "^5.9.3"
-  },
-  "dependencies": {
   }
 }

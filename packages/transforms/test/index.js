@@ -1,3 +1,6 @@
+//const chaix = require("chai");
+//const chaiAlmost = require("chai-almost");
+
 import {T} from "./testSupport.js";
 import {Transform, transformsToPlacements} from "../dist/index.js"
 import * as chai from "chai";
@@ -6,7 +9,7 @@ import * as chai from "chai";
 // attempt to install the almost extension to chai, the
 // mocha test fails at finding any tests
 // const chaiAlmost = require("chai-almost");
-
+import * as chai_ext from "chai-almost/index.js"
 
 let expect = chai.expect;
 
