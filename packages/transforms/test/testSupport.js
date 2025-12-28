@@ -10,5 +10,18 @@ export function makeRotateTransform(xv,yv,zv){
             "z" :zv
         }
     );
-}
+};
+
+export function T(xv,yv,zv){
+    const jsonld = {
+        "type" : "TranslateTransform",
+        "x"    : xv,
+        "y"    : yv,
+        "z"    : zv
+    };
+    const u =  new manifesto.TranslateTransform(jsonld);
+    u.label = "T"
+    return u;
+};
+
 
