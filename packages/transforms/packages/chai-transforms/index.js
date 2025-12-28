@@ -39,12 +39,14 @@ function isAffineTransform(aff, maxdepth=4){
     */
     if (maxdepth < 0)
         throw new Error("excess recursion in isAffineTransform");
-        
-    if (aff["applyToVector3"] !== undefined) return true;
     
-    if ( Array.isArray(aff) && aff.length > 0 )
+    if (aff["applyToVector3"] != undefined) return true;
+    
+    if ( Array.isArray(aff) && aff.length > 0 ){
         for (let i = 0; i < aff.length; ++i)
             if (!isAffineTransform(aff[i], maxdepth-1)) return false;
+        return true;
+    }
             
     return false;         
 }
@@ -53,8 +55,9 @@ function applyIteratedTransforms( op, vector , maxdepth=4 ){
     if (maxdepth < 0)
         throw new Error("excess recursion in applyIteratedTransforms");
     
-    if (op.applyToVector3 != undefined)
+    if (op.applyToVector3 !== undefined){
         return op.applyToVector3(vector);
+    }
     else {
         let acc = vector;
         for (let i = 0; i < op.length; ++i)
@@ -73,7 +76,7 @@ function chaiTransforms () {
 
     function overrideAssertEqual (_super) {
       return function assertEqual (val, msg) {
-        if (msg) utils.flag(this, 'message', msg)
+        if (msg) utils.flag(this, 'message', msg);
 
         if ( isVector3(val) && isVector3(this._obj )){
             
@@ -101,8 +104,8 @@ function chaiTransforms () {
             for (let j = 0; j < 2; ++j)
             for (let k = 0; k < 2; ++k){
                 const testVect = new Vector3(cVs[i] , cVs[j], cVs[k]);
-                const objVect = this._obj.applyToVector3( testVect );
-                const valVect = val.applyToVector3( testVect );
+                const objVect = applyIteratedTransforms(this._obj, testVect);
+                const valVect = applyIteratedTransforms(val      , testVect);
                 
                 const testRes = (useAlmost)?
                                 areAlmostEqualVector3s(objVect,valVect,tolerance):
