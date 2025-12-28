@@ -2,6 +2,12 @@ import {T} from "./testSupport.js";
 import {Transform, transformsToPlacements} from "../dist/index.js"
 import * as chai from "chai";
 
+// at 1:11 PM Dec 28 2025: when the following is uncommented, in the
+// attempt to install the almost extension to chai, the
+// mocha test fails at finding any tests
+// const chaiAlmost = require("chai-almost");
+
+
 let expect = chai.expect;
 
 function labels(aList){
