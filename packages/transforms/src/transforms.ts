@@ -36,7 +36,11 @@ export abstract class Transform{
     public static from_manifesto_transform(t:manifesto.Transform | manifesto.PointSelector ) : Transform{
         if (t instanceof manifesto.RotateTransform ){
             const degreesAngles:AxesValues = extractAxesValues(t.__jsonld, 0.0);
-            const order:string='ZYX';
+            /*
+            Developer Note 1 Jan 2026: Remember that in threejs-math; Euler angles are defined
+            as intrinsic rotations and as such are precisely referred to as Tait-Bryan angles
+            */
+            const order:string='XYZ';
             const radianValues = degreesAngles.map( MathUtils.degToRad );
             const eulerArgs:any[] = (radianValues as any[]).concat([order])
             const euler = new Euler().fromArray( eulerArgs as [number,number,number,IOrder] );
