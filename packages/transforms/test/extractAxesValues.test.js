@@ -10,7 +10,7 @@ describe("test extractAxesValues", function(){
         [{x:1.5, z:-1.5},  1.0,  [1.5,1.0,-1.5]]
     ].forEach( function(testcase) {
         const [axes_values, default_value, exact_result] = testcase;
-        it(`argument: ${JSON.stringify(axes_values)} ${default_value}`, function(){
+        it(`argument: ${JSON.stringify(axes_values)} default ${default_value}`, function(){
             const test_result = extractAxesValues(axes_values, default_value);
             expect(test_result).to.exist;
             expect(test_result).to.have.lengthOf(3);
