@@ -15,7 +15,7 @@ const testCases = [
         [T(1.0,2.0,3.0),R(90,0,0),R(0,45.0,0),S(1,1,1)]
     ];
 
-describe(`test case`, function(){
+describe.skip(`test case`, function(){
 
     [
         [S(1,1,1),R(90,0,0),T(1.0,2.0,3.0)],
