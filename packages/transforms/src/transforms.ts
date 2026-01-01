@@ -90,7 +90,6 @@ export class Translation extends Transform {
     
     applyToVector3( a:Vector3 ):Vector3{
         const rv = this.vect.clone().add(a);
-        console.log(`Translation.applyToVector3 : ${this.vect} + ${a} -> ${rv}`);
         return rv;
     }
     
