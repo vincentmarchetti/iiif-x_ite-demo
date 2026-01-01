@@ -18,19 +18,6 @@ export function extractAxesValues(obj : object, defaultValue:number) : AxesValue
     }) as AxesValues;
 }
 
-/*
-function insertAxesValues( values : AxesValues, obj: object ):object {
-    return  AxesName.reduce( (obj :object, axes_name:string, index:number):object => {
-        const val:number = values[index];
-        if ((val == 0.0) && (obj[axes_name] != undefined))
-            delete obj[axes_name];
-        else
-            obj[axes_name] = val;
-        return obj;
-    }, obj);        
-}
-*/
-
 export abstract class Transform{
 
     public static from_manifesto_transform(t:manifesto.Transform | manifesto.PointSelector ) : Transform{
@@ -191,45 +178,6 @@ export class Scaling extends Transform{
             })
         );
     }  
-    
-    /*
-    private decompose():[Rotation, Scaling] | null {
-    
-        const uscale = Math.abs( this.scales[0]);
-        for (let i = 1; i<3; ++i)
-            if (Math.abs(this.scales[i]) != uscale)
-                return null
-        
-        const neg_count = this.scales.reduce( (accum:number, value:number):number =>{
-                    if (value < 0.0) return accum+1;
-                    return accum;
-                    }, 0);
-
-        const scaling:Scaling = (neg_count % 2 == 0)? Scaling.fromScalar(uscale):
-                                                      Scaling.fromScalar(-uscale);
-                                                      
-        const rotation : Rotation = ( () => {
-            if ( neg_count == 0 || neg_count == 3)
-                return new Rotation( new Quaternion() );
-                
-            const axis = new Vector3(0,0,0);
-            const angle:number = Math.PI;
-            
-            for (let i = 0; i<3;++i){
-                if (neg_count == 1 && this.scales[i] > 0.0) continue;
-                if (neg_count == 2 && this.scales[i] < 0.0) continue;
-                axis.setComponent(i as 0|1|2, 1.0); 
-                break;
-            }
-            return new Rotation(
-                new  Quaternion().setFromAxisAngle(axis,angle)
-            );
-        })();
-        
-        
-        return [rotation,scaling];
-    }
-    */
     
     applyToPlacement(placement : Placement ):Placement {
         
