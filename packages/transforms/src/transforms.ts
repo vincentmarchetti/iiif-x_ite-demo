@@ -3,22 +3,19 @@ import {Quaternion, Euler,  IOrder, MathUtils, Vector3} from "threejs-math";
 
 
 type AxesValues = [number, number, number];
-const AxesName = ["x", "y", "z"];
+const AxesNames = ["x", "y", "z"];
 
-function extractAxesValues(obj : object, defaultValue:number) : AxesValues{
-    let rv:number[] = AxesName.reduce( (accum:number[] ,axes_name:string) => {
-        accum.push( ( ():number => {   
-            const v = obj[axes_name];
-            if (v ===  undefined )   
-                return defaultValue;
-            else
-                return Number(v);
-        }        
-        )());
-        return accum;
-    }, []);
-    if (rv.length == 3) return rv as AxesValues;
-    throw new TypeError();
+
+Vector3.prototype.toString = function(){
+    return `Vector3(${this.x}, ${this.y}, ${this.z})`;
+}
+
+export function extractAxesValues(obj : object, defaultValue:number) : AxesValues{
+    return AxesNames.map( (axis_name):number => {
+        const c = obj[axis_name];
+        if ( c === undefined ) return defaultValue;
+        return Number(c);
+    }) as AxesValues;
 }
 
 /*
@@ -38,7 +35,7 @@ export abstract class Transform{
 
     public static from_manifesto_transform(t:manifesto.Transform | manifesto.PointSelector ) : Transform{
         if (t instanceof manifesto.RotateTransform ){
-            const degreesAngles:AxesValues = extractAxesValues(t, 0.0);
+            const degreesAngles:AxesValues = extractAxesValues(t.__jsonld, 0.0);
             const order:string='ZYX';
             const radianValues = degreesAngles.map( MathUtils.degToRad );
             const eulerArgs:any[] = (radianValues as any[]).concat([order])
@@ -49,12 +46,12 @@ export abstract class Transform{
         
         if (t instanceof manifesto.TranslateTransform ||
             t instanceof manifesto.PointSelector ){
-            const coords:AxesValues = extractAxesValues(t, 0.0);
+            const coords:AxesValues = extractAxesValues(t.__jsonld, 0.0);
             return new Translation( new Vector3().fromArray(coords));
         }
         
         if (t instanceof manifesto.ScaleTransform ) {
-            const coords:AxesValues = extractAxesValues(t, 1.0);
+            const coords:AxesValues = extractAxesValues(t.__jsonld, 1.0);
             return new Scaling( coords );
         }
 
@@ -69,7 +66,7 @@ export abstract class Transform{
     abstract applyToPlacement(placement : Placement ):Placement;
     
 
-    abstract get x3dTransformFields():Record<string,string>;
+    abstract get x3dTransformFields():Record<string,number[]> | null;
 }
 
 export class Translation extends Transform {
@@ -87,8 +84,10 @@ export class Translation extends Transform {
         return true;
     }
     
-    applyToVector3( vect:Vector3 ):Vector3{
-        return this.vect.clone().add(vect);
+    applyToVector3( a:Vector3 ):Vector3{
+        const rv = this.vect.clone().add(a);
+        console.log(`Translation.applyToVector3 : ${this.vect} + ${a} -> ${rv}`);
+        return rv;
     }
     
     applyToPlacement( placement:Placement):Placement{
@@ -96,11 +95,11 @@ export class Translation extends Transform {
         return new Placement(placement.scaling, placement.rotation, translation);
     }
     
-    get x3dTransformFields():Record<string,string> {
+    get x3dTransformFields():Record<string,number[]> | null {
         if (this.isIdentity(1.0e-8))
             return {};
             
-        return {"translation" : `{this.vect.x} {this.vect.y} {this.vect.z}`};
+        return {"translation" : [ this.vect.x ,this.vect.y, this.vect.z]};
     }
 }
 export class Rotation extends Transform{
@@ -141,17 +140,13 @@ export class Rotation extends Transform{
         return Math.abs(angle) <= tolerance;
     }
     
-    get x3dTransformFields():Record<string,string> {
-    
-        const vec = new Vector3(this.quat.x, this.quat.y, this.quat.z);
-        const vlen:number = vec.length();
-        const angle = 2.0 * Math.atan2( vlen , this.quat.w);
+    get x3dTransformFields():Record<string,number[]> | null {
+        const [axis, angle ]:[Vector3, number] =  Rotation.AxisAngle(this.quat);
     
         if (Math.abs(angle) <= 1.0e-6)
-            return {}
-      
-        const axis:Vector3  = vec.clone().divideScalar(vlen);
-        return {"rotation" : `{vec.x} {vec.y} {vec.z} {angle}`};
+           return   null;
+        
+        return {"rotation" : [ axis.x, axis.y, axis.z , angle ]};
     }
 }
 
@@ -282,11 +277,11 @@ export class Scaling extends Transform{
         return new Placement(scaling, rotation, translation);
     } 
     
-    get x3dTransformFields():Record<string,string> {
+    get x3dTransformFields():Record<string,number[]> | null {
         if (this.isIdentity(1.0e-6))
             return {};
             
-        return {"scale" : `{this.scales[0]} {this.scales[1]} {this.scales[2]}`};
+        return {"scale" : [this.scales[0] , this.scales[1] , this.scales[2]]};
     }
 }
 
