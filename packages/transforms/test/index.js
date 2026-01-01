@@ -17,8 +17,11 @@ const testCases = [
 
 describe(`test case`, function(){
 
-    
-    testCases.forEach( function(tc){
+    [
+        [S(1,1,1),R(90,0,0),T(1.0,2.0,3.0)],
+        [T(1.0,2.0,3.0),R(90,0,0),S(1,1,1)],
+        [T(1.0,2.0,3.0),R(90,0,0),R(0,45.0,0),S(1,1,1)]
+    ].forEach( function(tc){
         it(`test case ${labels(tc)}`, function(){        
             let manifestoList = tc;
             
@@ -32,4 +35,30 @@ describe(`test case`, function(){
         });
     });
 });
+
+describe('test case 2', function(){
+
+    [
+        [R(0.0,75.0,15.0) , {"rotation" : [0.12867778 , 0.97740474,  0.16769614 , 1.33113625]}]
+    ].forEach( function(tc){
+        it('subcase', function(){
+            const transform = Transform.from_manifesto_transform(tc[0]);
+            const exactDict = tc[1];
+            const testDict = transform.x3dTransformFields;
+            
+            const rotation = exactDict["rotation"];
+            
+            if (rotation != undefined)
+            {
+                expect(testDict).to.exist;
+                expect(testDict["rotation"]).to.be.almost.deep.equal(rotation);
+            }
+            else{
+                expect(testDict["rotation"]).to.not.exist;
+            }
+        })
+    })
+})
+
+
 
