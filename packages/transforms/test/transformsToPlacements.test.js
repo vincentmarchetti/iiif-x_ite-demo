@@ -19,16 +19,19 @@ const testCases = [
 describe(`transformsToPlacements`, function(){
 
     [
-        [S(1,1,1),R(90,0,0),T(1.0,2.0,3.0)],
-        [T(1.0,2.0,3.0),R(90,0,0),S(1,1,1)],
-        [T(1.0,2.0,3.0),R(90,0,0),R(0,45.0,0),S(1,1,1)]
-    ].forEach( function(manifestoList){
+        [[S(1,1,1),R(90,0,0),T(1.0,2.0,3.0)],              1],
+        [[T(1.0,2.0,3.0),R(90,0,0),S(1,1,1)],              1],
+        [[T(1.0,2.0,3.0),R(90,0,0),R(0,45.0,0),S(1,1,1)],  1],
+        [[S(1,2,1),T(1.9,-2,0),R(0,30,0),S(-1,0.5,2)],     2]
+    ].forEach( function(testCase){
+        const [manifestoList, exact_placements_length] = testCase;
         it(`argument [${manifestoList}]`, function(){        
             const transformsList = manifestoList.map(Transform.from_manifesto_transform);
             expect(transformsList).to.be.a('array');
             
             let placements = transformsToPlacements(transformsList);
             expect(placements).to.be.a('array');
+            expect(placements).to.have.lengthOf(exact_placements_length);
             
             const testCoords = [0.0,1.0];
             for (let i = 0; i<2;++i)

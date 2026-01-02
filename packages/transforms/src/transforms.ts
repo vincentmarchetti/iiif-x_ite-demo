@@ -57,7 +57,7 @@ export abstract class Transform{
     abstract applyToPlacement(placement : Placement ):Placement;
     
 
-    abstract get x3dTransformFields():Record<string,number[]> | null;
+    abstract get x3dTransformFields():Record<string,number[]>;
 }
 
 export class Translation extends Transform {
@@ -85,11 +85,15 @@ export class Translation extends Transform {
         return new Placement(placement.scaling, placement.rotation, translation);
     }
     
-    get x3dTransformFields():Record<string,number[]> | null {
+    get x3dTransformFields():Record<string,number[]>  {
         if (this.isIdentity(1.0e-8))
-            return {};
+            return {} as Record<string,number[]>;
             
         return {"translation" : [ this.vect.x ,this.vect.y, this.vect.z]};
+    }
+    
+    toString(){
+        return `Translation(${this.vect.x}, ${this.vect.y}, ${this.vect.z})`;
     }
 }
 export class Rotation extends Transform{
@@ -130,11 +134,11 @@ export class Rotation extends Transform{
         return Math.abs(angle) <= tolerance;
     }
     
-    get x3dTransformFields():Record<string,number[]> | null {
+    get x3dTransformFields():Record<string,number[]>  {
         const [axis, angle ]:[Vector3, number] =  Rotation.AxisAngle(this.quat);
     
         if (Math.abs(angle) <= 1.0e-6)
-           return   null;
+           return   {} as Record<string,number[]>;
         
         return {"rotation" : [ axis.x, axis.y, axis.z , angle ]};
     }
@@ -179,10 +183,26 @@ export class Scaling extends Transform{
         );
     }  
     
+    /*
+    Developer note 2 Jan 2026: The following implementation of applying
+    a Scaling transform to a p;acement, an ordered listing of Scaling, Rotation, and
+    Translation transforms, relies on one of the following be true:
+    1) the existing Rotation in the placement is the identity, so that rotation
+       commutes with any scaling.
+       OR
+    2) the applied Scaling instance ("this") is uniform, the absolute values of the
+       scale factors are equal; in this case the Scaling can be decomposed into a
+       Rotation and a Scaling which is proportional to +/- the identity. That combination
+       can be commute with an arbitray Rotation component of the placement.
+       
+    For future reference: with some addition implementaton, I think we could handle the
+    additional case of a not-uniform scaling commmuting with a placement.rotation which is
+    all right-angle turns, equivalent to permutation of axes.
+    */
     applyToPlacement(placement : Placement ):Placement {
         
-        if (!this.isUniform())
-            throw new Error("pre contract: cannot apply non-uniform scaling to Placement");
+        if ( !(this.isUniform()) && !(placement.rotation.isIdentity()))
+            throw new Error("pre contract: cannot apply non-uniform scaling to Placement with rotation");
             
         const uscale = Math.abs( this.scales[0]);
         
@@ -228,11 +248,13 @@ export class Scaling extends Transform{
         return new Placement(scaling, rotation, translation);
     } 
     
-    get x3dTransformFields():Record<string,number[]> | null {
-        if (this.isIdentity(1.0e-6))
-            return {};
+    get x3dTransformFields():Record<string,number[]>{
+        //if (this.isIdentity(1.0e-6))
+        //    return {} as Record<string,number[]>;
             
-        return {"scale" : [this.scales[0] , this.scales[1] , this.scales[2]]};
+        const rv = {"scale" : [this.scales[0] , this.scales[1] , this.scales[2]]};
+        console.log(`in Scaling.x3dTransformFields ${JSON.stringify(rv)}`);
+        return rv
     }
 }
 
@@ -256,18 +278,37 @@ export class Placement {
             )
         );
     }
+    
+    get x3dTransformFields():Record<string,number[]>  {
+        
+        return [this.translation, this.rotation, this.scaling].reduce(
+            function( accum:Record<string,number[]>, t:Transform){
+                const x3dfields:Record<string,number[]> = t.x3dTransformFields;
+                Object.keys(x3dfields).forEach(function(key:string){
+                    accum[key] = x3dfields[key];
+                });
+                return accum;
+            }, {} as Record<string,number[]>
+        );
+    }
+    
+    toString(){
+        return `Placement( translation:${this.translation})`;
+    }
 }
 
 export function transformsToPlacements( transforms:Transform[]):Placement[]{
-    return transforms.reduce( (accum:Placement[], t:Transform ):Placement[] =>{
-        if (accum.length == 0) accum.push(new Placement() );
-        
-        const placement:Placement = accum[ accum.length-1 ];
-        if ( !t.applyToPlacement( accum[ accum.length-1 ] )){
-            const next = new Placement();
-            t.applyToPlacement(next);
-            accum.push(next);
+    const retVal= transforms.reduce( (accum:Placement[], t:Transform, index:number ):Placement[] =>{
+        const active_index = accum.length - 1;
+        const last_placement:Placement = accum[active_index];
+        if ( (t instanceof Scaling) && !((t as Scaling).isUniform()) && !(last_placement.rotation.isIdentity()))
+        {
+            accum.push( new Placement( t as Scaling) );
+            return accum;
         }
+        
+        accum[active_index] = t.applyToPlacement( last_placement );
         return accum;
-    }, []);
+    }, [new Placement()]);
+    return retVal;
 }
