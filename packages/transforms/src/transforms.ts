@@ -201,8 +201,26 @@ export class Scaling extends Transform{
     */
     applyToPlacement(placement : Placement ):Placement {
         
-        if ( !(this.isUniform()) && !(placement.rotation.isIdentity()))
-            throw new Error("pre contract: cannot apply non-uniform scaling to Placement with rotation");
+        if ( !this.isUniform() ){
+            if ( placement.rotation.isIdentity() ){
+                const new_placement:Placement = new Placement();
+                new_placement.scaling = new Scaling(
+                    this.scales.map( function(val:number,index:number):number{
+                        return val * placement.scaling.scales[index];
+                    })
+                );
+                
+                new_placement.rotation = placement.rotation;
+                
+                new_placement.translation = new Translation(
+                    this.applyToVector3(placement.translation.vect)
+                );
+                return new_placement;
+            } else {
+                throw new Error("pre contract: cannot apply non-uniform scaling to Placement with rotation");
+            }
+        }
+            
             
         const uscale = Math.abs( this.scales[0]);
         
@@ -249,12 +267,9 @@ export class Scaling extends Transform{
     } 
     
     get x3dTransformFields():Record<string,number[]>{
-        //if (this.isIdentity(1.0e-6))
-        //    return {} as Record<string,number[]>;
-            
-        const rv = {"scale" : [this.scales[0] , this.scales[1] , this.scales[2]]};
-        console.log(`in Scaling.x3dTransformFields ${JSON.stringify(rv)}`);
-        return rv
+        if (this.isIdentity(1.0e-6))
+            return {} as Record<string,number[]>;
+        return {"scale" : [this.scales[0] , this.scales[1] , this.scales[2]]};
     }
 }
 
