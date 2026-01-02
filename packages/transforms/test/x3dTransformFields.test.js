@@ -11,7 +11,7 @@ describe("x3dTransformFields", function(){
         const fields = placement.x3dTransformFields;
         
         expect(fields).to.exist;
-        expect(Object.keys(fields)).to.have.lengthOf(1);
+        expect(Object.keys(fields)).to.have.lengthOf(0);
     });
     
     /*
@@ -31,7 +31,9 @@ describe("x3dTransformFields", function(){
         [ S(2.0,2.0,2.0), {"scale" : [2,2,2]}],
         [ R(0,180,0),     {"rotation" : [0,1,0,3.1415925]}],
         [ T(-0.3,0.1,-0.2),{"translation":[-0.3,0.1,-0.2]}],
-        [ R(0, 75, 15 ),    {"rotation" : [0.12867778, 0.97740474, 0.16769614, 1.33113625]}]          
+        [ R(0, 75, 15 ),    {"rotation" : [0.12867778, 0.97740474, 0.16769614, 1.33113625]}] ,
+        [ S(2,3,4),        {"scale":[2,3,4]}] , 
+        [[S(2,3,4)],        {"scale":[2,3,4]}] ,        
     ].forEach(function(tc){
         const [testCase,exactfields] = tc;
         it(`test ${testCase}`, function(){
