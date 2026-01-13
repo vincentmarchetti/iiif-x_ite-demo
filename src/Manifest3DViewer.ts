@@ -1,4 +1,5 @@
-
+import {manifesto} from "manifesto-prezi4";
+import {SceneRender, SceneHooks } from "./SceneRender.ts";
 
 export class Manifest3DViewer {
 
@@ -15,7 +16,7 @@ export class Manifest3DViewer {
             this.browser.viewAll();
             });
         }
-    }
+    };
 
     
     constructor( container : HTMLElement ){
@@ -26,41 +27,49 @@ export class Manifest3DViewer {
         }
         this.browser = canvas.browser;
         console.debug(`created browser: ${this.browser.name}:${this.browser.version}`);
-    }
+    };
     
-    public async display( manifest : any ){
+    private findAllScenes( manifest : manifesto.Manifest ):Scene[] {
+        return manifest.getSequences().map( (seq:Sequence):Scene[] =>{
+            return seq.getScenes();
+        }).flat();
+    };
+    
+    /*
+    intention is that this will be the entry point when a manifest is 
+    loaded on startup or through user entry in an editable text box
+    */
+    public async display( manifest : manifesto.Manifest ):void {
         /*
         manifest will be an instance of Manifest class from manifesto
         */
         console.log(`display manifest ${manifest.id}`);
-        await show_stub_content(this.browser)
-    }
-}
-
-
-async function show_stub_content(browser:any){
-    /* 
-    this function is a stub to just show something
-    -- as specified by a url to a glb model
-    in the viewer; eventually this needs to be replaced
-    by the call that will cause a manifest to be rendered
-    by the viewer
+        /*
+        logic is that the first scene will be displayed
+        */
+        const allScenes = this.findAllScenes(manifest);
+        if (allScenes.length > 0){
+             await this.renderScene( allScenes[0], manifest, browser);
+        } 
+        else{
+            console.warn("manifest with no Scene resources");
+        }        
+    };
+    
+    public async displaySceneById( id : string, manifest: manifesto.Manifest ):void
+    {
+        
+    };
+    /*
+    Developer note 13 Jan 2026 . THe browser argument is 
+    very loosely typed pending figuring out if the X_ITE
+    package provides a more explicit type.
     */
-    
-    console.debug("X3D " + X3D );
-    const model_url = "https://spri-open-resources.s3.us-east-2.amazonaws.com/iiif3dtsg/woodblocks/redF.glb";
-    // https://create3000.github.io/x_ite/accessing-the-external-browser/#pure-javascript
-    const scene = await browser.createScene();
-    console.debug("scene " + scene);
-    const inline = scene.createNode("Inline");
-    inline.url = new X3D.MFString([ model_url ]);
-    scene.rootNodes.push(inline);
-    
-    console.debug("loading scene");
-    await browser.replaceWorld(scene);  
-    console.log("scene replaced");
-    // following may not work because it is being called before
-    // the glb file is loaded
-    
-    // canvas.browser.viewAll();
+    private async renderScene(  scene: manifesto.Scene, 
+                                manifest: manifesto.Manifest){
+        const scene_handle = new SceneRender(scene, manifest, this.browser);
+        const hooks:SceneHooks =  await scene_handle.render();
+    };
 }
+
+

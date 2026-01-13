@@ -58,7 +58,7 @@ function initialize_manifest_elements(){
         throw new Error("initialize_manifest_elements: getElementById(\"xite-view-container\") failed");
         
     document.addEventListener("new_manifest", async (event) => {        
-        console.log("new_manifest event fired");
+        console.debug("new_manifest event fired");
         const container = document.getElementById("xite-view-container");
         const viewer = new Manifest3DViewer(container);
         viewer.showAllButton = document.getElementById("xite-show-all");
@@ -76,7 +76,7 @@ function initialize_manifest_elements(){
     for readability and flexibility in reconfiguring.
 */
 async function  dom_loaded_viewer_handler(event){
-    console.log("DOMContentLoaded fired");  
+    console.debug("DOMContentLoaded fired");  
     initialize_manifest_elements();
     
     let data;
@@ -97,16 +97,16 @@ async function  dom_loaded_viewer_handler(event){
     }
         
     if (data !== null){
-        console.log(`return : fetch_manifest_json( ${window.location} ) ==> ${data}`);
+        console.debug(`return : fetch_manifest_json( ${window.location} ) ==> ${data}`);
         await handle_manifest_json( data );
     }
     else
-        console.log(`no manifest url identified in ${window.location}`);
+        console.warn(`no manifest url identified in ${window.location}`);
 }
 
 function attach_window_listener(){
     window.addEventListener("DOMContentLoaded", dom_loaded_viewer_handler);
-    console.log("DOMContentLoaded listener added to window");
+    console.debug("DOMContentLoaded listener added to window");
 }
 
 
