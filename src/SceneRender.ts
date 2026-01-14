@@ -5,6 +5,12 @@ import {manifesto} from "manifesto-prezi4";
 import {render_stub_content} from "./render_stub_content.ts";
 
 /*
+Code in this module assumes there is an object X3D in the global context due
+to having imported the X_ITE library. This will be sanity-checked in the
+constructor for the SceneRender class
+*/
+
+/*
 SceneHooks will be an instance with a number of elements
 referring to HTMLElements inside the scene, or other constructs,
 that can be used to client to connect to external UI elements
@@ -34,6 +40,10 @@ export class SceneRender {
         this.scene =scene;
         this.manifest = manifest;
         this.browser = browser;
+        
+        if ( X3D == undefined ){
+            throw new Error("global X3D not defined in SceneRender.constuctor");
+        }
     }
     
     /*
@@ -45,9 +55,35 @@ export class SceneRender {
     */
     public async render() : SceneHooks {
         console.debug( `enter SceneRende.render for scene ${this.scene.id}`);
+        
+        /*
+        scene_x is a constructed representation of the scenegraph int he X_ITE 
+        context. It is roughly  the Scene element in the X3D as well as the DOM tree. 
+        Strictly, it  it is not an X3D node.
+        
+        Calling it scene_x to avoid confusion with this.scene, the static IIIF resource
+        as represented in manifesto
+        */
+        let scene_x =  await this.browser.createScene();
+        
+        this.addNavigationInfo( scene_x );
+        this.addBackground( scene_x );
+        
+        this.scene.annotationPages.forEach( (page:manifesto.AnnotationPage) => {
+            this.addAnnotationPage(scene_x, page);
+        });
+        
+        
+        
+        
+        
         await render_stub_content(this.browser);
         
         const hooks = new Object();
         return hooks;
     }
+    
+    private addNavigationInfo(scene_x):void {}
+    private addBackground(scene_x):void {}
+    private addAnnotationPage(scene_x):void {}
 }
