@@ -8,6 +8,7 @@
   ],
   "author": "Vincent Marchetti",
   "scripts": {
+    "docs": "typedoc",
     "test": "npm run build:commonjs ; mocha  --require ./test/setup.js",
     "build": "tsc",
     "build:commonjs": "tsc --module commonjs --outDir dist-commonjs"
@@ -17,5 +18,8 @@
     "chai-almost": "^1.0.1",
     "mocha": "^11.7.5",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "typedoc": "^0.28.16"
   }
 }
