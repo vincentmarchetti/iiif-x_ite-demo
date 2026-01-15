@@ -207,8 +207,8 @@ export class Scaling extends Transform{
                 new_placement.scaling = new Scaling(
                     this.scales.map( function(val:number,index:number):number{
                         return val * placement.scaling.scales[index];
-                    })
-                );
+                    }) as AxesValues
+                ) ;
                 
                 new_placement.rotation = placement.rotation;
                 
