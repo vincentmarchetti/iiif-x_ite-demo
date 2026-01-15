@@ -1,8 +1,10 @@
 import {manifesto} from "manifesto-prezi4";
+import {Transform} from "../packages/transforms/dist";
 
 // Developer Note: Jan 13 2026, import of render_stub_content is strictly a 
 // development feature, not relevant to production level
 import {render_stub_content} from "./render_stub_content.ts";
+
 
 /*
 Code in this module assumes there is an object X3D in the global context due
@@ -21,7 +23,26 @@ by HTML events.
 */
 export interface SceneHooks {
     
-}
+};
+
+
+function getTransformsForBody( resource : manifesto.ManifestResource):Transform[] {
+    if (resource instanceof manifesto.SpecificResource ){
+        return (resource as SpecificResource).getTransform()
+            .map( Transform.from_manifesto_transform );
+    };
+    return ( [] as Transform[] );
+};
+
+function getTransformsForTarget( resource : manifesto.ManifestResource):Transform[] {
+    if (resource instanceof manifesto.SpecificResource || 
+        resource.getSelector() instanceof manifesto.PointSelector ){
+        const selector : manifesto.PointSelector = (resource as SpecificResource).getSelector();
+        return [ Transform.from_manifesto_transform(selector )];
+    };
+    return ( [] as Transform[] );
+};
+
 
 export class SceneRender {
 
