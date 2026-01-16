@@ -1,6 +1,7 @@
 import {manifesto} from "manifesto-prezi4";
 import {SceneRender, SceneHooks } from "./SceneRender.ts";
 
+export {manifesto}
 export class Manifest3DViewer {
 
     public readonly browser : any ;
