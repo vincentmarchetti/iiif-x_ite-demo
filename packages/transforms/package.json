@@ -10,8 +10,9 @@
   "scripts": {
     "docs": "typedoc",
     "test": "npm run build:commonjs ; mocha  --require ./test/setup.js",
-    "build": "tsc",
-    "build:commonjs": "tsc --module commonjs --outDir dist-commonjs"
+    "build:es6": "tsc",
+    "build:commonjs": "tsc --module commonjs --outDir dist-commonjs",
+    "build" : "npm run build:commonjs; npm run build:es6"
   },
   "devDependencies": {
     "chai": "^6.2.1",
