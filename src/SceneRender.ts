@@ -1,12 +1,11 @@
 import {manifesto} from "manifesto-prezi4";
-import {Transform} from "../packages/transforms/dist";
+import {Transform, transformsToPlacements } from "../packages/transforms/dist";
 
 // Developer Note: Jan 13 2026, import of render_stub_content is strictly a 
 // development feature, not relevant to production level
 import {render_stub_content} from "./render_stub_content.ts";
 import {expect} from "chai";
 
-export {manifesto};
 
 /*
 Code in this module assumes there is an object X3D in the global context due
@@ -29,16 +28,16 @@ export interface SceneHooks {
 
 
 function getTransformsForBody( resource : manifesto.ManifestResource):Transform[] {
-    if (resource instanceof manifesto.SpecificResource ){
-        return (resource as SpecificResource).getTransform()
+    if (resource.isSpecificResource ){
+        return (resource.getTransform())
             .map( Transform.from_manifesto_transform );
     };
     return ( [] as Transform[] );
 };
 
 function getTransformsForTarget( resource : manifesto.ManifestResource):Transform[] {
-    if (resource instanceof manifesto.SpecificResource || 
-        resource.getSelector() instanceof manifesto.PointSelector ){
+    if ( resource.isSpecificResource  || 
+        (resource.getSelector && resource.getSelector().isPointSelector()) ){
         const selector : manifesto.PointSelector = (resource as SpecificResource).getSelector();
         return [ Transform.from_manifesto_transform(selector )];
     };
@@ -46,13 +45,7 @@ function getTransformsForTarget( resource : manifesto.ManifestResource):Transfor
 };
 
 function thisOrSource(resource: manifesto.ManifestResource):manifesto.ManifestResource{
-    expect(resource,"thisOrSource resource").to.exist;
-    expect(resource.__jsonld,"thisOrSource resource.__jsonld").to.exist;
-    console.debug(`thisOrSource resource.__jsonld\n${JSON.stringify(resource.__jsonld)}`);
-    //expect(manifesto,"thisOrSource manifesto").to.exist;
-    //console.debug(`thisOrSource: typeof(manifesto.SpecificResource) ${typeof(manifesto.SpecificResource)}`);
-    expect(resource.isSpecificResource,"thisOrSource manifesto.SpecificResource").to.exist;
-    if (resource.isSpecificResource() )
+    if (resource.isSpecificResource )
         return resource.getSource();
     return resource;
 }
@@ -79,7 +72,7 @@ export class SceneRender {
         if ( X3D == undefined ){
             throw new Error("global X3D not defined in SceneRender.constuctor");
         }
-    }
+    };
     
     private scene_x = null;
     
@@ -130,7 +123,6 @@ export class SceneRender {
     
     private addAnnotationPage(container, page: manifesto.AnnotationPage):void {
         const group  = this.createNode("Group");
-        console.log(`page.__jsonld\n ${JSON.stringify(page.__jsonld)}`);
         page.getAnnotations().forEach( (anno:manifesto.Annotation):void => {
             this.addAnnotation( group.children , anno );
         });
@@ -138,14 +130,7 @@ export class SceneRender {
     }
     
     private addAnnotation(container, anno:manifesto.Annotation):void {
-        console.debug(`enter SceneRender.addAnnotation ${container} ${anno}`);
-        
-        expect(anno,"anno in SceneRender.addAnnotation").to.exist;
-        expect(anno,"anno in SceneRender.addAnnotation").to.be.an("object");
-        expect(anno.__jsonld,"anno.__jsonld in SceneRender.addAnnotation").to.exist;
-        //console.debug(`SceneRender.addAnnotation anno.getProperty('type')  ${anno.getProperty('type')}`);
-        expect(anno.isAnnotation(),"anno.isAnnotation").to.equal(true);
-        expect(anno.getBody, "anno.getBody in SceneRender.addAnnotation").to.exist;
+        console.debug(`enter SceneRender.addAnnotation ${anno.id}`);
         const bodyOrNull = this.chooseBody( anno.getBody());
         if (bodyOrNull == null) return
         
@@ -166,11 +151,35 @@ export class SceneRender {
     private addModel(   container, 
                         body : manifesto.ManifestResource, 
                         target: manifesto.ManifestResource):void{
+                        
+        const prettyPrint = (tlist:Transform[]):string => {
+            const subs = tlist.map( (t:Transform):string =>
+                {return t.toString();});
+            return subs.join();
+        }
+        
         const model:manifesto.Model = thisOrSource(body);
-        console.log(`adding model ${model.id}`);
+        console.debug(`adding model ${model.id}`);
         
         const inline = this.createNode("Inline");
         inline.url = new X3D.MFString([ model.id ]);
+            
+        const net_transforms =  [   ...getTransformsForBody(body),
+                                    ...getTransformsForTarget(target) ];
+        ( (to_console:bool) => {
+            const items:string[] = net_transforms.map((item) => item.toString());
+            const msg:string = `SceneRender.addModel net_transforms: ${items.join()}`;
+            if (to_console) console.debug(msg);
+        })(true);
+                                    
+        const placements = transformsToPlacements( net_transforms );
+        
+        ( (to_console:bool) => {
+            const items:string[] = placements.map((item) => item.toString());
+            const msg:string = `SceneRender.addModel placements: ${items.join()}`;
+            if (to_console) console.debug(msg);
+        })(true);
+        
         container.push(inline);
         return;                       
     }
