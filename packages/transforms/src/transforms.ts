@@ -97,7 +97,8 @@ export class Translation extends Transform {
     }
     
     toString(){
-        return `Translation(${this.vect.x}, ${this.vect.y}, ${this.vect.z})`;
+        const axes:string[] = this.vect.toArray().map( (val) => val.toFixed(2) );
+        return `T(${axes.join(",")})`;
     }
 }
 export class Rotation extends Transform{
@@ -145,6 +146,15 @@ export class Rotation extends Transform{
            return   {} as Record<string,number[]>;
         
         return {"rotation" : [ axis.x, axis.y, axis.z , angle ]};
+    }
+    
+    toString(){
+        const axes:string[] = new Euler().setFromQuaternion(this.quat,"XYZ")
+                        .toArray().slice(0,3)
+                        .map(MathUtils.radToDeg)
+                        .map( (val) => val.toFixed(1));
+        return `R(${axes.join(",")})`;
+                        
     }
 }
 
@@ -275,6 +285,11 @@ export class Scaling extends Transform{
             return {} as Record<string,number[]>;
         return {"scale" : [this.scales[0] , this.scales[1] , this.scales[2]]};
     }
+    
+    toString(){
+        const axes:string[] = this.scales.map( (val) => val.toFixed(1) );
+        return `S(${axes.join(",")})`;
+    }
 }
 
 
@@ -312,7 +327,9 @@ export class Placement {
     }
     
     toString(){
-        return `Placement( translation:${this.translation})`;
+        const items:string[] = [this.scaling,this.rotation,this.translation]
+                                .map( (t) => t.toString() );
+        return `Placement( ${items.join(",")})`;
     }
 }
 
