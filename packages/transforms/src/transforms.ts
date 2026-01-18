@@ -22,7 +22,7 @@ export abstract class Transform{
 
     public static from_manifesto_transform(t:manifesto.Transform | manifesto.PointSelector ) : Transform{
         if (t instanceof manifesto.RotateTransform ){
-            const degreesAngles:AxesValues = extractAxesValues(t.__jsonld, 0.0);
+            const degreesAngles:AxesValues = extractAxesValues(t.getRotation(), 0.0);
             /*
             Developer Note 1 Jan 2026: Remember that in threejs-math; Euler angles are defined
             as intrinsic rotations and as such are precisely referred to as Tait-Bryan angles
@@ -35,18 +35,22 @@ export abstract class Transform{
             return new Rotation(quat);
         }
         
-        if (t instanceof manifesto.TranslateTransform ||
-            t instanceof manifesto.PointSelector ){
-            const coords:AxesValues = extractAxesValues(t.__jsonld, 0.0);
+        if (t instanceof manifesto.TranslateTransform ){
+            const coords:AxesValues = extractAxesValues(t.getTranslation(), 0.0);
             return new Translation( new Vector3().fromArray(coords));
         }
         
         if (t instanceof manifesto.ScaleTransform ) {
-            const coords:AxesValues = extractAxesValues(t.__jsonld, 1.0);
+            const coords:AxesValues = extractAxesValues(t.getScale(), 1.0);
             return new Scaling( coords );
         }
+        
+        if (t instanceof manifesto.PointSelector ) {
+            const coords:AxesValues = extractAxesValues(t.getLocation(), 0.0);
+            return new Translation( new Vector3().fromArray(coords));
+        }
 
-        throw new TypeError();
+        throw new TypeError(`Translate.from_manifesto_transform unsupported: ${t}`);
     }
     
     
