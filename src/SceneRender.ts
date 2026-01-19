@@ -118,8 +118,17 @@ export class SceneRender {
         return hooks;
     }
     
-    private addNavigationInfo(container):void {}
-    private addBackground(container):void {}
+    private addNavigationInfo(container):void {
+        const navInfo = this.createNode("NavigationInfo");
+        navInfo.headlight = true;
+        container.push(navInfo);
+    }
+    
+    private addBackground(container):void {
+        const backGround = this.createNode("Background");
+        backGround.skyColor = new X3D.MFColor(new X3D.SFColor(0.5,0.7,0.5));
+        container.push(backGround);
+    }
     
     private addAnnotationPage(container, page: manifesto.AnnotationPage):void {
         const group  = this.createNode("Group");
