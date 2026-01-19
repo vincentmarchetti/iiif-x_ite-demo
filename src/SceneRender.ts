@@ -144,7 +144,7 @@ export class SceneRender {
         if (bodySource.isModel())
             return this.addModel(container, body,target);
 
-        console.warn(`unsupported body type ${bodySource.getType()}`);
+        console.warn(`unsupported body type`);
         return;
     }
     
@@ -180,7 +180,38 @@ export class SceneRender {
             if (to_console) console.debug(msg);
         })(true);
         
-        container.push(inline);
+        const setTransformNodeField = {
+            "translation"   : ((node, c) => {node.translation = new X3D.SFVec3f(...c);}),
+            "rotation"      : ((node, c) => {node.rotation =    new X3D.SFRotation(...c);}),
+            "scale"         : ((node, c) => {node.scale =       new X3D.SFVec3f(...c);})
+        };
+        
+        const outerNode = placements.reduce( (accum, placement: Placement) => {
+            const x3dFields:Record<string,number[]> = placement.x3dTransformFields;
+            const entries = Object.entries(x3dFields);
+            if (entries.length > 0){
+                const newNode = this.createNode("Transform");
+
+                entries.forEach( (entry )=> {
+                    const [name, value] = entry;
+                    if      (name === "rotation") 
+                        newNode.rotation = new X3D.SFRotation(...value);
+                    else if (name === "translation")
+                        newNode.translation = new X3D.SFVec3f(...value);
+                    else if (name === "scale")
+                        newNode.scale = new X3D.SFVec3f(...value);
+                    else 
+                        throw new Error(`SceneRender.addModel : unrecognized Transform field name ${name}`);
+                    
+                });
+                
+                newNode.children.push(accum);
+                return newNode;
+            }
+            return accum;
+        },
+        inline);        
+        container.push(outerNode);
         return;                       
     }
         
