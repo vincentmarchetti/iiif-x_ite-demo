@@ -1,6 +1,7 @@
 import {manifesto} from "manifesto-prezi4";
 import {Transform, transformsToPlacements } from "../packages/transforms/dist";
 
+
 // Developer Note: Jan 13 2026, import of render_stub_content is strictly a 
 // development feature, not relevant to production level
 import {render_stub_content} from "./render_stub_content.ts";
@@ -23,7 +24,7 @@ It will support the mechanism by which activating annotations are triggered
 by HTML events.
 */
 export interface SceneHooks {
-    
+    NavigationInfo : any
 };
 
 
@@ -55,6 +56,11 @@ export class SceneRender {
     private readonly browser:any;
     private readonly scene : manifesto.Scene;
     
+    private readonly defaultBackground = {
+        red: 204,
+        green: 204,
+        blue: 102
+    };
     
     /*
     Developer note: Jan 13 2026 at initial implementation
@@ -63,6 +69,10 @@ export class SceneRender {
     stage there is no explicit reason for keeping it.
     */
     private readonly manifest : manifesto.Manifest;
+    
+    private hooks: SceneHooks = {
+        NavigationInfo: null
+    };
     
     public constructor( scene : manifesto.Scene, manifest : manifesto.Manifest, browser : any){
         this.scene =scene;
@@ -114,19 +124,26 @@ export class SceneRender {
         await this.browser.replaceWorld(this.scene_x); 
         //await render_stub_content(this.browser);
         
-        const hooks = new Object();
-        return hooks;
+        
+        return this.hooks;
     }
     
     private addNavigationInfo(container):void {
         const navInfo = this.createNode("NavigationInfo");
         navInfo.headlight = true;
+        this.hooks.NavigationInfo = navInfo;
         container.push(navInfo);
     }
     
     private addBackground(container):void {
+        const rgb = this.scene.getBackgroundColor() ?? this.defaultBackground;
+                                
+        // convert red, green, blue values of rgn to 
+        // floats in range [0.0,1.0]
+        const values:number[] = [rgb.red, rgb.green, rgb.blue]
+                                .map( (v) => Math.min(Math.round(v/0.255)*0.001, 1.0));
         const backGround = this.createNode("Background");
-        backGround.skyColor = new X3D.MFColor(new X3D.SFColor(0.5,0.7,0.5));
+        backGround.skyColor = new X3D.MFColor(new X3D.SFColor(...values));
         container.push(backGround);
     }
     
@@ -153,6 +170,9 @@ export class SceneRender {
         if (bodySource.isModel())
             return this.addModel(container, body,target);
 
+        if (bodySource.isCamera )
+            return this.addCamera(container, body, target);
+            
         console.warn(`unsupported body type`);
         return;
     }
@@ -222,6 +242,32 @@ export class SceneRender {
         inline);        
         container.push(outerNode);
         return;                       
+    }
+
+    private addCamera(  container, 
+                        body : manifesto.ManifestResource, 
+                        target: manifesto.ManifestResource):void{
+        
+        const net_transforms =  [   ...getTransformsForBody(body),
+                                    ...getTransformsForTarget(target) ];
+        ( (to_console:bool) => {
+            const items:string[] = net_transforms.map((item) => item.toString());
+            const msg:string = `SceneRender.addModel net_transforms: ${items.join()}`;
+            if (to_console) console.debug(msg);
+        })(true);
+                                    
+        const placements = transformsToPlacements( net_transforms );
+        if (placements.length > 1){
+            console.warn(`invalid transforms for Camera body`);
+        } 
+        const cameraLocation:[number,number,number] = ( () => {
+            const provisional: [number,number,number] | null =
+                placements[0]?.translation.x3dTransformFields["translation"];
+            return provisional ?? [0.0,0.0,0.0];
+        })();
+        console.debug(`cameraLocation ${cameraLocation}`);
+                             
+        return;
     }
         
     private chooseBody( resources : manifesto.ManifestResource[] ): ManifestResource | null {
