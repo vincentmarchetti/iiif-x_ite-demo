@@ -1,6 +1,6 @@
 import {manifesto} from "manifesto-prezi4";
-import {Transform, transformsToPlacements } from "../packages/transforms/dist";
-
+import {Transform, transformsToPlacements, Rotation, Placement } from "../packages/transforms/dist";
+import {Quaternion} from "threejs-math";
 
 // Developer Note: Jan 13 2026, import of render_stub_content is strictly a 
 // development feature, not relevant to production level
@@ -266,10 +266,42 @@ export class SceneRender {
             return provisional ?? [0.0,0.0,0.0];
         })();
         console.debug(`cameraLocation ${cameraLocation}`);
-                             
+          
+        const camera:manifesto.Camera = thisOrSource(body);     
+        const lookAt =   camera.LookAt;
+        
+        const cameraTransform:Rotation  = ( lookAt == null )?
+                this.cameraOrientationFromTransform(placements):
+                this.cameraOrientationFromLookat( cameraLocation, lookAt); 
+        const cameraOrientation: [number,number,number,number] = 
+            cameraTransform.x3dTransformFields.rotation;
+        console.debug(`cameraOrientation ${cameraOrientation}`);
+                
+        const cameraNode = this.buildCameraNode( camera);
+        cameraNode.orientation = new X3D.SFRotation(...cameraOrientation);
+        cameraNode.position = new X3D.SFVec3f(...cameraLocation);
+        container.push( cameraNode );
         return;
     }
-        
+       
+    cameraOrientationFromTransform(placements: Placement[]):Rotation {
+        return placements[0]?.rotation ?? new Rotation( new Quaternion());
+    }
+    
+    cameraOrientationFromLookat( cameraLocation, lookAt):Rotation {
+        throw new Error("SceneRender.cameraOrientationFromLookat unimplemented");
+    }
+    
+    buildCameraNode( camera ){
+        if (camera.isPerspectiveCamera){
+            let retVal = this.createNode("Viewpoint");
+            let fov = camera.FieldOfView ?? 45.0;
+            retVal.fieldOfView = new X3D.SFFloat(fov);
+            return retVal;
+        }
+        throw new Error(`SceneRender.buildCameraNode unsupported camera`);
+    };
+    
     private chooseBody( resources : manifesto.ManifestResource[] ): ManifestResource | null {
         if (resources.length == 0) return null;
         return resources[0];
