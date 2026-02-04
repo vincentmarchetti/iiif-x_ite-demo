@@ -1,6 +1,6 @@
 import {manifesto} from "manifesto-prezi4";
-import {Transform, transformsToPlacements, Rotation, Placement } from "../packages/transforms/dist";
-import {Quaternion} from "threejs-math";
+import {Transform, transformsToPlacements, Rotation, Translation, Placement } from "../packages/transforms/dist";
+import {Quaternion, Vector3} from "threejs-math";
 
 // Developer Note: Jan 13 2026, import of render_stub_content is strictly a 
 // development feature, not relevant to production level
@@ -168,16 +168,17 @@ export class SceneRender {
         
         //if (bodySource instanceof manifesto.Model)
         if (bodySource.isModel())
-            return this.addModel(container, body,target);
+            return this.addModel(container, anno, body,target);
 
         if (bodySource.isCamera )
-            return this.addCamera(container, body, target);
+            return this.addCamera(container, anno, body, target);
             
         console.warn(`unsupported body type`);
         return;
     }
     
     private addModel(   container, 
+                        anno : manifesto.Annotation,
                         body : manifesto.ManifestResource, 
                         target: manifesto.ManifestResource):void{
                         
@@ -245,6 +246,7 @@ export class SceneRender {
     }
 
     private addCamera(  container, 
+                        anno : manifesto.Annotation,
                         body : manifesto.ManifestResource, 
                         target: manifesto.ManifestResource):void{
         
@@ -260,11 +262,8 @@ export class SceneRender {
         if (placements.length > 1){
             console.warn(`invalid transforms for Camera body`);
         } 
-        const cameraLocation:[number,number,number] = ( () => {
-            const provisional: [number,number,number] | null =
-                placements[0]?.translation.x3dTransformFields["translation"];
-            return provisional ?? [0.0,0.0,0.0];
-        })();
+        const cameraLocation:[number,number,number] = 
+            placements[0]?.translation.x3dTransformFields.translation ?? [0.0,0.0,0.0];
         console.debug(`cameraLocation ${cameraLocation}`);
           
         const camera:manifesto.Camera = thisOrSource(body);     
@@ -274,25 +273,33 @@ export class SceneRender {
                 this.cameraOrientationFromTransform(placements):
                 this.cameraOrientationFromLookat( cameraLocation, lookAt); 
         const cameraOrientation: [number,number,number,number] = 
-            cameraTransform.x3dTransformFields.rotation;
+            cameraTransform.x3dTransformFields.rotation ?? [0.0,0.0,1.0,0.0];
         console.debug(`cameraOrientation ${cameraOrientation}`);
                 
+        const cameraCenterTransform:Translate = (lookAt == null)?
+            this.centerFromTarget(target):
+            this.centerFromLookat(lookAt);
+        const cameraCenterOfRotation:[number,number,number] =
+            cameraCenterTransform.x3dTransformFields.translation ?? [0.0,0.0,0.0];
+        console.debug(`cameraCenterOfRotation ${cameraCenterOfRotation}`);
+        
         const cameraNode = this.buildCameraNode( camera);
         cameraNode.orientation = new X3D.SFRotation(...cameraOrientation);
         cameraNode.position = new X3D.SFVec3f(...cameraLocation);
+        cameraNode.centerOfRotation = new X3D.SFVec3f( ...cameraCenterOfRotation);
         container.push( cameraNode );
         return;
     }
        
-    cameraOrientationFromTransform(placements: Placement[]):Rotation {
+    private cameraOrientationFromTransform(placements: Placement[]):Rotation {
         return placements[0]?.rotation ?? new Rotation( new Quaternion());
     }
     
-    cameraOrientationFromLookat( cameraLocation, lookAt):Rotation {
+    private cameraOrientationFromLookat( cameraLocation, lookAt):Rotation {
         throw new Error("SceneRender.cameraOrientationFromLookat unimplemented");
     }
     
-    buildCameraNode( camera ){
+    private buildCameraNode( camera ){
         if (camera.isPerspectiveCamera){
             let retVal = this.createNode("Viewpoint");
             let fov = camera.FieldOfView ?? 45.0;
@@ -301,6 +308,16 @@ export class SceneRender {
         }
         throw new Error(`SceneRender.buildCameraNode unsupported camera`);
     };
+    
+    private centerFromTarget(target){
+        const placements = transformsToPlacements(getTransformsForTarget(target));
+        if (placements.length == 0) return new Translation(new Vector3());
+        return placements[0].translation;
+    }
+    
+    private centerFromLookat(lookat){
+        throw new Error(`SceneRender.centerFromLookat not implemented`);
+    }
     
     private chooseBody( resources : manifesto.ManifestResource[] ): ManifestResource | null {
         if (resources.length == 0) return null;
