@@ -8,6 +8,7 @@ It is not intended to put manifesto or its contents into global scope
 but for all I know that's an unintended consequence.
 */
 const manifesto = require("manifesto-prezi4");
+const jsonlint  = require('@prantlf/jsonlint')
 
 import {Manifest3DViewer} from "../../src/Manifest3DViewer.ts";
 import {fetch_manifest_json} from "../../src/fetch_manifest_json.ts";
@@ -118,10 +119,10 @@ function attach_load_text_listener(){
     const manifestText = document.querySelector("textarea#manifest-text").value;
     console.info(`manifest text: ${manifestText.length} characters`);
     try{
-        obj = JSON.parse(manifestText)
+        obj = jsonlint.parse(manifestText)
     }
     catch (error ){
-        console.info(`JSON parse failed with ${error}`);
+        console.info(`jsonlint parse failed with ${error}`);
     }
     return;
 }
