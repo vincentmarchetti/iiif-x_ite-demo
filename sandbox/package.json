@@ -1,5 +1,5 @@
 {
-  "name": "iiif-x_ite-viewer",
+  "name": "iiif-x_ite-sandbox",
   "version": "1.0.0",
   "description": "prototype of a IIIF 3D manifest viewer using the X-ITE X3D viewer",
   "author": "Vince Marchetti <vmarchetti@kshell.com>",
