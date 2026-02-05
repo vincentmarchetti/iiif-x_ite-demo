@@ -105,9 +105,26 @@ async function  dom_loaded_viewer_handler(event){
 }
 
 function attach_window_listener(){
-    window.addEventListener("DOMContentLoaded", dom_loaded_viewer_handler);
+document
+  .querySelector("button#load-manifest-from-text")
+  .addEventListener("click",  () => {
+    load_manifest_text();
+
     console.debug("DOMContentLoaded listener added to window");
+})
 }
 
+function attach_load_text_listener(){
+    const manifestText = document.querySelector("textarea#manifest-text").value;
+    console.info(`manifest text: ${manifestText.length} characters`);
+    try{
+        obj = JSON.parse(manifestText)
+    }
+    catch (error ){
+        console.info(`JSON parse failed with ${error}`);
+    }
+    return;
+}
 
-attach_window_listener();
+    
+attach_load_text_listener();
