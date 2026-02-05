@@ -9,8 +9,8 @@ but for all I know that's an unintended consequence.
 */
 const manifesto = require("manifesto-prezi4");
 
-import {Manifest3DViewer} from "./Manifest3DViewer.ts";
-import {fetch_manifest_json} from "./fetch_manifest_json.ts";
+import {Manifest3DViewer} from "../../src/Manifest3DViewer.ts";
+import {fetch_manifest_json} from "../../src/fetch_manifest_json.ts";
 
 /*
     handle_manifest_json is called when an object has
