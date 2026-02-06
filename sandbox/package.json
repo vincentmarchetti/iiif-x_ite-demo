@@ -13,5 +13,8 @@
   "dependencies": {
     "@prantlf/jsonlint": "^17.0.1",
     "manifesto-prezi4": "file:./packages/manifesto-prezi4/dist-commonjs"
+  },
+  "devDependencies": {
+    "posthtml-include": "^2.0.1"
   }
 }
