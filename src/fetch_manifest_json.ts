@@ -3,6 +3,21 @@
 let MANIFEST_KEY : string = "manifest";
 export async function fetch_manifest_json(viewer_url_string : string ) : object | null {
     /**
+    *  Not all webpages that show a IIIF manifest will use this
+    *
+    *  This function supports the specific case where a manifest viewer is
+    *  initialized from a url or data-url passed in the query string of a URL
+    *  This function will usually be called with the window.location of the
+    *  webpages as the viewer_url_string
+    *
+    *  This async function does not do anything with the following potential failures
+    *  1. malformed url or data-url in query string
+    *  2. Network failure in retrieving remote url
+    *  3. Failure in parsing the network data or contents of data-url,
+    *     as a json object
+    *  These errors will just be thrown as exceptions to be handled by client 
+    *  code.
+    *
     *  extracts a URI, either a URL network location
     *  or a data URI, and does what is necessary to
     *  extract the parsed json object from that URL/URI
