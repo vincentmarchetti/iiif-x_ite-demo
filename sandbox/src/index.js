@@ -115,11 +115,21 @@ document
 })
 }
 
-function attach_load_text_listener(){
+async function attach_load_text_listener(){
+    document
+    .querySelector("button#load-manifest-from-text")
+    .addEventListener("click",  () => {
+    load_manifest_text()
+    });
+}
+
+async function load_manifest_text(){
     const manifestText = document.querySelector("textarea#manifest-text").value;
     console.info(`manifest text: ${manifestText.length} characters`);
     try{
-        obj = jsonlint.parse(manifestText)
+        let obj = jsonlint.parse(manifestText);
+        console.info(`json object parsed`);
+        await handle_manifest_json(obj);
     }
     catch (error ){
         console.info(`jsonlint parse failed with ${error}`);
@@ -128,4 +138,4 @@ function attach_load_text_listener(){
 }
 
     
-attach_load_text_listener();
+attach_window_listener();
