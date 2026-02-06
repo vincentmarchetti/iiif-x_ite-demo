@@ -19,6 +19,14 @@ document.addEventListener("new_manifest", async (event) => {
     const container = document.getElementById(XITE_VIEW_CONTAINER);
     if (container === null)
         throw new Error(`X-ITE setup: getElementById(\"${XITE_VIEW_CONTAINER}\") failed`);
+   
+    // clear any existing canvas, this code not intended to support
+    // multiple canvases on a page
+    if (container.childElementCount > 0){
+        console.log(`X-ITE viewer: clearing current canvas`);
+        container.replaceChildren();
+    }     
+        
     const viewer = new Manifest3DViewer(container);    
     const showAllButton = document.getElementById(XITE_SHOWALL_BUTTON);
     if (showAllButton == null)
