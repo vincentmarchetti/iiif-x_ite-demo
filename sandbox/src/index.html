@@ -28,11 +28,9 @@
         
 
 </head>
-<body style="display:flex; flex-flow:row; flex-grow:1; width:100% ">
+<body>
+<div id="two-columns">
 <div id="left-side">
-<div id="main-title">
-Prototype IIIF Manifest Viewer with <a href="https://github.com/create3000/x_ite">X-ITE</a> X3D viewer
-</div>
 
 <div id="xite-view-container"></div>
 
@@ -46,11 +44,14 @@ Prototype IIIF Manifest Viewer with <a href="https://github.com/create3000/x_ite
 </div>
 </div> <!-- end left-side div element -->
 
-<div id="right-side" style="flex-grow:1; width:80%" >
-<textarea id="manifest-text" style="width:80%; height:480px;" >
+<div id="right-side"  >
+<textarea id="manifest-text"  >
 <include src="init_textarea.txt"></include>
 </textarea>
 <button id="load-manifest-from-text">Load Manifest into Viewer</button>
+
+<div id="load-result-message"></div>
 </div> <!-- end right-side div element -->
+</div> <!-- end two-columns -->
 </body>
 </html>
