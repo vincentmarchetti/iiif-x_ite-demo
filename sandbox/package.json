@@ -1,0 +1,20 @@
+{
+  "name": "iiif-x_ite-sandbox",
+  "version": "1.0.0",
+  "description": "prototype of a IIIF 3D manifest viewer using the X-ITE X3D viewer",
+  "author": "Vince Marchetti <vmarchetti@kshell.com>",
+  "type": "module",
+  "source": "src/index.html",
+  "scripts": {
+    "start": "parcel --open",
+    "build": "parcel build",
+    "clean": "rimraf --verbose dist .parcel-cache"
+  },
+  "dependencies": {
+    "@prantlf/jsonlint": "^17.0.1",
+    "manifesto-prezi4": "file:./packages/manifesto-prezi4/dist-commonjs"
+  },
+  "devDependencies": {
+    "posthtml-include": "^2.0.1"
+  }
+}
