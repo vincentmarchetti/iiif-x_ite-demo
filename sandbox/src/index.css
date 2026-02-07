@@ -1,5 +1,5 @@
 
-#two-columns {display:flex; flex-direction:row;}
+#two-columns {display:flex; flex-direction:row; margin-top:1em;}
 
 #two-columns > div {display:flex; flex-direction:column; padding:10px}
 
@@ -21,4 +21,7 @@ button {font-size:14pt; height:32px;}
 .logo-image {height:72px; } 
 #credits > *:not(:first-child) {margin-left:36px;}
 
-#load-result-message {width:100%; height:72px;}
+#load-result-message {width:100%; height:96px; padding:3px}
+
+.success-parsing {}
+.failed-parsing  {border: 2px solid orange;}
