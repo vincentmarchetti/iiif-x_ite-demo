@@ -1,125 +1,330 @@
 {
   "@context": "http://iiif.io/api/presentation/4/context.json",
-  "id": "https://example.com/iiif_blender_plugin/manifest/1",
+  "id": "https://www.kshell.com/assets/iiifmanifests/decorated_cups_20260106.json",
   "type": "Manifest",
-  "rights": "https://creativecommons.org/licenses/by/4.0/",
+  
   "label": {
-    "none": [
-      "default-manifest-label"
+    "en": [
+      "Three Cups with relief decorations"
     ]
   },
+  "summary" : {
+    "en" : [
+        "Items from the collections of three separate institutions",
+        "Coconut Goblet mounted in silver, York, England, c. 1700. All ready for the lime.",
+        "Tankard with a biblical scene, Augsburg, c. 1680",        
+        "Wedgewood Cup, Staffordshire, England, c. 1790"    
+    ]
+  },
+  "rights": "https://creativecommons.org/publicdomain/zero/1.0/",
   "items": [
     {
-      "id": "https://example.com/iiif_blender_plugin/scene/1",
+      "id": "_:scene/1",
       "type": "Scene",
-      "label": {
-        "none": [
-          "default-scene-label"
-        ]
-      },
+      "label": {},
       "items": [
         {
-          "id": "https://example.com/iiif_blender_plugin/annotationpage/1",
+          "id": "_:annotationpage/1",
           "type": "AnnotationPage",
-          "label": {
-            "none": [
-              "default-annotation-page-label"
-            ]
-          },
+          "label": {},
           "items": [
             {
-              "id": "https://example.com/iiif_blender_plugin/annotation/1",
+              "id": "_:annotation/1",
               "type": "Annotation",
               "motivation": [
                 "painting"
               ],
-              "target": {
-                "id": "https://example.com/iiif_blender_plugin/scene/1",
-                "type": "Scene"
-              },
-              "body": {
-                "id": "https://raw.githubusercontent.com/IIIF/3d/main/assets/astronaut/astronaut.glb",
-                "type": "Model",
-                "format": "model/gltf-binary"
-              }
-            },
-            {
-              "id": "https://example.com/iiif_blender_plugin/annotation/2",
-              "type": "Annotation",
-              "motivation": [
-                "painting"
-              ],
-              "target": {
-                "type": "SpecificResource",
-                "source": {
-                  "id": "https://example.com/iiif_blender_plugin/scene/1",
-                  "type": "Scene"
-                },
-                "selector": {
-                  "type": "PointSelector",
-                  "x": -0.21703900396823883,
-                  "y": 2.358583688735962,
-                  "z": 1.237433910369873
-                }
-              },
               "body": {
                 "type": "SpecificResource",
-                "source": {
-                  "id": "https://raw.githubusercontent.com/IIIF/3d/refs/heads/main/assets/saxophone/saxophone.glb",
-                  "type": "Model",
-                  "format": "model/gltf-binary"
-                },
                 "transform": [
-                  {
-                    "type": "RotateTransform",
-                    "x": 80.91010671926922,
-                    "y": 76.62914905318034,
-                    "z": -63.17131314280239
-                  },
                   {
                     "type": "ScaleTransform",
-                    "x": 2.799999952316284,
-                    "y": 2.799999952316284,
-                    "z": 2.799999952316284
+                    "x": 0.27399998903274536,
+                    "y": 0.27399998903274536,
+                    "z": 0.27399998903274536
+                  },
+                  {
+                    "type": "RotateTransform",
+                    "x": -1.999539800511937,
+                    "y": -0.000004332934882095375,
+                    "z": 2.9999992297089593
                   }
+                ],
+                "source": {
+                  "id": "https://spri-open-resources.s3.us-east-2.amazonaws.com/iiif3dtsg/cups/coconut_goblet_mounted_in_silver.glb",
+                  "format": "model/gltf-binary",
+                  "type": "Model"
+                }
+              },
+              "target": {
+                "type": "SpecificResource",
+                "selector": {
+                  "type": "PointSelector",
+                  "x": -0.31548917293548584,
+                  "y": 0.1002461314201355,
+                  "z": 1.059005856513977
+                },
+                "source": {
+                  "id": "_:scene/1",
+                  "type": "Scene"
+                }
+              },
+
+              "homepage": [
+                {
+                  "id": "https://sketchfab.com/3d-models/coconut-goblet-mounted-in-silver-0e3512ff6cc84215bc7d262f755a5f0d",
+                  "type": "Text",
+                  "label": {
+                    "en": [
+                      "3D Model page on SketchFab"
+                    ]
+                  },
+                  "format": "text/html",
+                  "language": [
+                    "en"
+                  ]
+                },
+                {
+                  "id": "https://collection.sciencemuseumgroup.org.uk/objects/co177230/",
+                  "type": "Text",
+                  "label": {
+                    "en": [
+                      "Object page on Science Museum Group (UK) Collection"
+                    ]
+                  },
+                  "format": "text/html",
+                  "language": [
+                    "en"
+                  ]
+                }
+              ],
+              "rights" : "https://creativecommons.org/licenses/by-nc/4.0/",
+              "label": {
+                "en": [
+                  "Coconut Goblet mounted in silver"
                 ]
               }
             },
             {
-              "id": "https://example.com/iiif_blender_plugin/annotation/3",
+              "id": "_:annotation/2",
               "type": "Annotation",
               "motivation": [
                 "painting"
               ],
-              "target": {
-                "type": "SpecificResource",
-                "source": {
-                  "id": "https://example.com/iiif_blender_plugin/scene/1",
-                  "type": "Scene"
-                },
-                "selector": {
-                  "type": "PointSelector",
-                  "x": 1.7031829357147217,
-                  "y": 3.501267671585083,
-                  "z": 4.747387886047363
-                }
-              },
               "body": {
                 "type": "SpecificResource",
+                "transform": [
+                  {
+                    "type": "ScaleTransform",
+                    "x": 0.5,
+                    "y": 0.5,
+                    "z": 0.5
+                  }
+                ],
                 "source": {
-                  "id": "https://example.com/iiif_blender_plugin/perspectivecamera/1",
-                  "type": "PerspectiveCamera",
-                  "fieldOfView": 35.791465081147024
+                  "id": "https://spri-open-resources.s3.us-east-2.amazonaws.com/iiif3dtsg/cups/Tabletop.glb",
+                  "format": "model/gltf-binary",
+                  "type": "Model"
+                }
+              },
+              "target": {
+                "id": "_:scene/1",
+                "type": "Scene"
+              },
+              "label": {
+                "en": [
+                  "Textured 3D model of a marble tabletop"
+                ]
+              }
+            },
+            {
+              "id": "_:annotation/3",
+              "type": "Annotation",
+              "motivation": [
+                "painting"
+              ],
+              "body": {
+                "type": "SpecificResource",
+                "transform": [
+                  {
+                    "type": "ScaleTransform",
+                    "x": 1.022822380065918,
+                    "y": 1.022822380065918,
+                    "z": 1.022822380065918
+                  },
+                  {
+                    "type": "RotateTransform",
+                    "x": 0.000005008956130975331
+                  }
+                ],
+                "source": {
+                  "id": "https://spri-open-resources.s3.us-east-2.amazonaws.com/iiif3dtsg/cups/tankard_with_a_biblical_scene.glb",
+                  "format": "model/gltf-binary",
+                  "type": "Model"
+                }
+              },
+              "target": {
+                "type": "SpecificResource",
+                "selector": {
+                  "type": "PointSelector",
+                  "x": -0.026406653225421906,
+                  "y": 16.666810989379883,
+                  "z": -17.195606231689453
                 },
+                "source": {
+                  "id": "_:scene/1",
+                  "type": "Scene"
+                }
+              },
+              "homepage": [
+                {
+                  "id": "https://sketchfab.com/3d-models/tankard-with-a-biblical-scene-d968b14919544a7e81dbe6802049faae",
+                  "type": "Text",
+                  "label": {
+                    "en": [
+                      "3D Model page on SketchFab"
+                    ]
+                  },
+                  "format": "text/html",
+                  "language": [
+                    "en"
+                  ]
+                },
+                {
+                  "id": "https://muzea.malopolska.pl/pl/lista-obiektow/2777",
+                  "type": "Text",
+                  "label": {
+                    "en": [
+                      "Object page at the Virtual Museum of Malapolska"
+                    ]
+                  },
+                  "format": "text/html",
+                  "language": [
+                    "pl"
+                  ]
+                }
+              ],
+              "rights" : "https://creativecommons.org/publicdomain/zero/1.0/",
+              "label": {
+                "en": [
+                  "Tankard with a biblical scene"
+                ],
+                "pl": [
+                  "Kufel ze scenÄ… biblijnÄ…"
+                ]
+              }
+            },
+            {
+              "id": "_:annotation/4",
+              "type": "Annotation",
+              "motivation": [
+                "painting"
+              ],
+              "body": {
+                "type": "SpecificResource",
+                "transform": [
+                  {
+                    "type": "ScaleTransform",
+                    "x": 2.072999954223633,
+                    "y": 2.072999954223633,
+                    "z": 2.072999954223633
+                  },
+                  {
+                    "type": "RotateTransform",
+                    "x": -0.3847404471611457,
+                    "y": 0.9966075226702525,
+                    "z": 1.0001309397866271
+                  }
+                ],
+                "source": {
+                  "id": "https://spri-open-resources.s3.us-east-2.amazonaws.com/iiif3dtsg/cups/1951.305.a_cup.glb",
+                  "format": "model/gltf-binary",
+                  "type": "Model"
+                }
+              },
+              "target": {
+                "type": "SpecificResource",
+                "selector": {
+                  "type": "PointSelector",
+                  "x": 0.3207629323005676,
+                  "y": 0.26021164655685425,
+                  "z": 0.09262336790561676
+                },
+                "source": {
+                  "id": "_:scene/1",
+                  "type": "Scene"
+                }
+              },
+              "homepage": [
+                {
+                  "id": "https://sketchfab.com/3d-models/1951305a-cup-f236475e0ad64a1eaa2db9c59f917820",
+                  "type": "Text",
+                  "label": {
+                    "en": [
+                      "3D Model page at SketchFab"
+                    ]
+                  },
+                  "format": "text/html",
+                  "language": [
+                    "en"
+                  ]
+                },
+                {
+                  "id": "https://www.clevelandart.org/art/1951.305.a",
+                  "type": "Text",
+                  "label": {
+                    "en": [
+                      "Object page at the Cleveland Museum of Art"
+                    ]
+                  },
+                  "format": "text/html",
+                  "language": [
+                    "en"
+                  ]
+                }
+              ],
+              "rights" : "https://creativecommons.org/publicdomain/zero/1.0/",
+              "label": {
+                "en": [
+                  "Wedgewood Cup"
+                ]
+              }
+            },
+            {
+              "id": "_:annotation/5",
+              "type": "Annotation",
+              "motivation": [
+                "painting"
+              ],
+              "body": {
+                "type": "SpecificResource",
                 "transform": [
                   {
                     "type": "RotateTransform",
-                    "x": -8.89866164434875,
-                    "y": 20.065529960630236,
-                    "z": 2.0641877544495193
+                    "x": -6.801187759910054,
+                    "y": -9.706267423836522,
+                    "z": -1.1519221824149344
                   }
-                ]
-              }
+                ],
+                "source": {
+                  "type": "PerspectiveCamera",
+                  "fieldOfView": 8.0
+                }
+              },
+              "target": {
+                "type": "SpecificResource",
+                "selector": {
+                  "type": "PointSelector",
+                  "x": -0.7135263085365295,
+                  "y": 0.6279031038284302,
+                  "z": 4.463036060333252
+                },
+                "source": {
+                  "id": "_:scene/1",
+                  "type": "Scene"
+                }
+              },
+              "label": {}
             }
           ]
         }
