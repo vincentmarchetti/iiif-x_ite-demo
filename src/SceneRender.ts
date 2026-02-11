@@ -1,6 +1,6 @@
 import {manifesto} from "manifesto-prezi4";
 import {Transform, transformsToPlacements, Rotation, Translation, Placement } from "../packages/transforms/dist";
-import {Quaternion, Vector3} from "threejs-math";
+import {Quaternion, Vector3, MathUtils} from "threejs-math";
 
 // Developer Note: Jan 13 2026, import of render_stub_content is strictly a 
 // development feature, not relevant to production level
@@ -303,7 +303,8 @@ export class SceneRender {
         if (camera.isPerspectiveCamera){
             let retVal = this.createNode("Viewpoint");
             let fov = camera.FieldOfView ?? 45.0;
-            retVal.fieldOfView = new X3D.SFFloat(fov);
+            let fov_rad = MathUtils.degToRad( fov );
+            retVal.fieldOfView = new X3D.SFFloat(fov_rad);
             return retVal;
         }
         throw new Error(`SceneRender.buildCameraNode unsupported camera`);
