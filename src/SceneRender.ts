@@ -57,9 +57,9 @@ export class SceneRender {
     private readonly scene : manifesto.Scene;
     
     private readonly defaultBackground = {
-        red: 204,
-        green: 204,
-        blue: 102
+        red: 236,
+        green: 236,
+        blue: 236
     };
     
     /*
