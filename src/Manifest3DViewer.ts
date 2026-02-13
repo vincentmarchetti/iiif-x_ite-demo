@@ -50,7 +50,7 @@ export class Manifest3DViewer {
         */
         const allScenes = this.findAllScenes(manifest);
         if (allScenes.length > 0){
-             await this.renderScene( allScenes[0], manifest, browser);
+             await this.renderScene( allScenes[0], manifest);
         } 
         else{
             console.warn("manifest with no Scene resources");
