@@ -9,14 +9,13 @@
 
 #right-side > *:not(:first-child) {margin-top:1em;}
 #xite-view-container {width:512px; aspect-ratio:  1/1 ;}
-
-#xite-view-container x3d-canvas {width:100%; height:100%; }
+#xite-view-container > x3d-canvas {width:512px; height:512px;}
 
 #xite-control > * {margin-top:1em;  }
 button {font-size:14pt; height:32px;}
 
 #credits {margin-top:1em;}
-#manifest-text {width:100% ; font-size:12pt; flex:auto;}
+#manifest-text {width:100% ; height:512px; font-size:12pt; flex:auto;}
 
 .logo-image {height:72px; } 
 #credits > *:not(:first-child) {margin-left:36px;}
