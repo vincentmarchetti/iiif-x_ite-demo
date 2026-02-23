@@ -22,6 +22,8 @@
       "id": "_:scene/1",
       "type": "Scene",
       "label": {},
+      "backgroundColor":"#C0C0C0",
+
       "items": [
         {
           "id": "_:annotationpage/1",
