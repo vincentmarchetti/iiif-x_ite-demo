@@ -1,4 +1,4 @@
-const manifesto = require( "manifesto-prezi4/index.js");
+const manifesto = require( "manifesto-prezi4");
 const Vector3 = require("threejs-math").Vector3;
 
 Vector3.prototype.toString =  function(){
