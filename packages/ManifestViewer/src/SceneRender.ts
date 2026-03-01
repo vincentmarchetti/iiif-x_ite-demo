@@ -30,19 +30,42 @@ export interface SceneHooks {
 
 function getTransformsForBody( resource : manifesto.ManifestResource):Transform[] {
     if (resource.isSpecificResource ){
-        return (resource.getTransform())
-            .map( Transform.from_manifesto_transform );
+        const transformList :   manifesto.Transform[] = resource.Transform ?? 
+                                ([] as manifesto.Transform[]);
+        try{
+            return transformList.map( (t:manifesto.Transform, index:number):Transform =>{
+                try{
+                    return Transform.from_manifesto_transform(t);
+                }
+                catch (error){
+                    const msg=`Array.map index ${index} | ${error}`;
+                    throw new Error(msg);
+                }
+            });
+        }
+        catch (error){
+            const msg = `SceneRender.getTransformsForBody | ${error}`;
+            throw new Error(msg);
+            // dev note 20260301: following is essentially "ignore bad input"
+            // remove as cruft 1 April 2026
+            console.error(msg); return ( [] as Transform[] )
+        }
     };
     return ( [] as Transform[] );
 };
 
 function getTransformsForTarget( resource : manifesto.ManifestResource):Transform[] {
-    if ( resource.isSpecificResource  || 
-        (resource.getSelector && resource.getSelector().isPointSelector()) ){
-        const selector : manifesto.PointSelector = (resource as SpecificResource).getSelector();
-        return [ Transform.from_manifesto_transform(selector )];
-    };
-    return ( [] as Transform[] );
+    try{
+
+    const selector = (resource.isSpecificResource && resource.Selector) ?? null;    
+    return (( selector?.isPointSelector) && 
+            [ Transform.from_manifesto_transform(selector )]) ??
+            ( [] as Transform[] );
+    }
+    catch (error){
+        const msg = `getTransformsForTarget.getTransformsForTarget | ${error}`;
+        throw new Error(msg);
+    }
 };
 
 function thisOrSource(resource: manifesto.ManifestResource):manifesto.ManifestResource{
