@@ -1,6 +1,6 @@
 import * as chai from  "chai";
 import chaiAlmost from "chai-almost";
-import chaiTransforms from "../../packages/chai-transforms/index.js";
+import {chaiTransforms} from "@kshell/transforms/chai-transforms";
 
 
 chai.use(chaiAlmost());

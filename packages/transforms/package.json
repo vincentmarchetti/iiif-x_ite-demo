@@ -1,6 +1,9 @@
 {
   "name": "@kshell/transforms",
-  "exports" : "./dist/index.js",
+  "exports" : {
+    "." :"./dist/index.js",
+    "./chai-transforms" : "./packages/chai-transforms/index.mjs"
+  },
   "version": "1.0.0",
   "type" : "module",
   "main" : "./dist/index.js",

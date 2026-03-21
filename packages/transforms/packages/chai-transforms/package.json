@@ -1,12 +1,12 @@
 {
   "name": "chai-transforms",
-  "exports" : "./index.js",
+  "exports" : "./index.mjs",
   "version": "1.0.0",
   "description": "Extension to chai supporting 'almost equal' testing of Vector3 and object supporting applyToVector3 methods",
   "license": "ISC",
   "author": "Vincent Marchetti",
   "type": "module",
-  "main": "./index.js",
+  "main": "./index.mjs",
   "scripts": {
     "test": "mocha test/test.js  --require ./test/setup/index.js"
   },
