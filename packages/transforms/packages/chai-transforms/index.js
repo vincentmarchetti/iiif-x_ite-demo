@@ -1,5 +1,5 @@
-const type = require('type-detect')
-const Vector3 = require('threejs-math').Vector3;
+//const type = require('type-detect')
+//import {Vector3}'threejs-math').Vector3;
 
 /*
 While not mathematically true,
@@ -18,7 +18,7 @@ function isVector3(vect){
 
 function areAlmostEqualVector3s(vA,vB, tolerance ){
     for (let i=0;i<3;++i){
-        axis = ["x","y","z"][i];
+        const axis = ["x","y","z"][i];
         const err = Math.abs( vA[axis] - vB[axis] );
         if (err > tolerance) return false;
     }
@@ -29,7 +29,7 @@ function areAlmostEqualVector3s(vA,vB, tolerance ){
 * returns a function to be passed to chai.use
  * @see http://chaijs.com/guide/plugins/
  */
-function chaiTransforms () {
+export function chaiTransforms () {
     return function (chai, utils) {
         function overrideAssertEqual (_super) {
             return function assertEqual (val, msg) {
@@ -55,6 +55,4 @@ function chaiTransforms () {
     }
 }
 
-
-module.exports = chaiTransforms;
     
