@@ -2,7 +2,9 @@ import * as manifesto from "@kshell/manifesto-prezi4";
 import {Quaternion, Euler,  IOrder, MathUtils, Vector3} from "threejs-math";
 
 
-type AxesValues = [number,number,number];
+export type AxesValues = manifesto.AxesValues;
+export type OrientationValues = [number,number,number,number];
+
 const AxesNames = ["x", "y", "z"];
 
 
@@ -10,15 +12,6 @@ Vector3.prototype.toString = function(){
     return `Vector3(${this.x}, ${this.y}, ${this.z})`;
 }
 
-/*
-export function extractAxesValues(obj : object, defaultValue:number) : AxesValues{
-    return AxesNames.map( (axis_name):number => {
-        const c = obj[axis_name];
-        if ( c === undefined ) return defaultValue;
-        return Number(c);
-    }) as AxesValues;
-}
-*/
 
 export abstract class Transform{
 
@@ -29,7 +22,7 @@ export abstract class Transform{
             as intrinsic rotations and as such are precisely referred to as Tait-Bryan angles
             */
             const order:string='XYZ';
-            const radianValues = (t as manifesto.ITransform).AxesValues.map( MathUtils.degToRad );
+            const radianValues = (t as manifesto.ITransform).Components.map( MathUtils.degToRad );
             const eulerArgs = [...radianValues, order] as [number,number,number,IOrder];
             const euler = new Euler().fromArray( eulerArgs  );
             const quat = new Quaternion().setFromEuler(euler);
@@ -37,11 +30,11 @@ export abstract class Transform{
         }
         
         if ((t as any).isTranslateTransform || (t as any).isPointSelector){
-            return new Translation( new Vector3().fromArray(t.AxesValues));
+            return new Translation( new Vector3().fromArray(t.Components));
         }
         
         if ((t as any).isScaleTransform ) {
-            return new Scaling( t.AxesValues as AxesValues );
+            return new Scaling( t.Components as AxesValues );
         }
         
 
