@@ -9,7 +9,7 @@ by id xite-view-container
 Then configures a handler to a custom event new_manifest fired from document    
 */
 
-import {Manifest3DViewer} from "./Manifest3DViewer.ts";
+import {Manifest3DViewer} from "./Manifest3DViewer.js";
 
 const XITE_VIEW_CONTAINER="xite-view-container";
 const XITE_SHOWALL_BUTTON="xite-show-all";

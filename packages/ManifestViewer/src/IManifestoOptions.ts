@@ -1,4 +1,4 @@
-import {manifesto} from "manifesto-prezi4";
+import {manifesto} from "@kshell/manifesto-prezi4";
 
 export IManifestoOptions = manifesto.IManifestoOptions;
 

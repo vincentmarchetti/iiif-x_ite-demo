@@ -1,5 +1,5 @@
-import * as manifesto from "manifesto-prezi4/src/index.ts";
-import {SceneRender, SceneHooks } from "./SceneRender.ts";
+import * as manifesto from "@kshell/manifesto-prezi4";
+import {SceneRender, SceneHooks } from "./SceneRender.js";
 
 export {manifesto}
 export class Manifest3DViewer {

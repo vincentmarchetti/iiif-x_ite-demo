@@ -1,11 +1,11 @@
-import {manifesto} from "manifesto-prezi4";
-import {Transform, transformsToPlacements, Rotation, Translation, Placement } from "transforms/src";
+import {manifesto} from "@kshell/manifesto-prezi4";
+import {Transform, transformsToPlacements, Rotation, Translation, Placement } from "@kshell/transforms";
 import {Quaternion, Vector3, MathUtils} from "threejs-math";
 
 // Developer Note: Jan 13 2026, import of render_stub_content is strictly a 
 // development feature, not relevant to production level
-import {render_stub_content} from "./render_stub_content.ts";
-import {expect} from "chai";
+//import {render_stub_content} from "./render_stub_content.ts";
+//import {expect} from "chai";
 
 
 /*
