@@ -13,7 +13,7 @@
   "dependencies": {
     "@kshell/manifesto-prezi4" :   "file:./packages/manifesto-prezi4",
     "ManifestViewer"   :   "file:./packages/ManifestViewer",
-    "transforms"       :   "file:./packages/transforms",
+    "@kshell/transforms"       :   "file:./packages/transforms",
     "threejs-math"     :   "^0.147.0"
   },
   "devDependencies": {
