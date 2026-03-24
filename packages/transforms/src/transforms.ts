@@ -41,6 +41,10 @@ export abstract class Transform{
         throw new TypeError(`Transform.from_manifesto_transform unsupported: ${t}`);
     }
     
+    public static from_point_selector(t: manifesto.PointSelector) : Translation {
+        return Transform.from_manifesto_transform(t) as Translation;
+    }
+    
     
     abstract isIdentity(tolerance?:number):boolean ;
     
@@ -279,7 +283,6 @@ export class Scaling extends Transform{
         return `S(${axes.join(",")})`;
     }
 }
-
 
 
 export class Placement {
