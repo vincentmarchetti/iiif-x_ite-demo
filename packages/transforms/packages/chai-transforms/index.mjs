@@ -7,7 +7,7 @@ any javascript object with numeric values
 of x,y,z properties is considered a Vector3
 */
 function isVector3(vect){
-    if ( typeof(vect) != "object" ) return false;
+    if ( typeof(vect) != "object" || vect == null ) return false;
     for(let i = 0; i<3;++i){
         const axis = ["x","y","z"][i];
         const coord = vect[axis];
