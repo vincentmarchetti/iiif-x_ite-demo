@@ -348,5 +348,25 @@ export function transformsToPlacements( transforms:Transform[]):Placement[]{
     Returns null in the edge case that base == aimAt (same location)
 */ 
 export function relativeRotation( base: Translation, aimAt : Translation): Rotation | null {
-    throw new Error(`relativeRotation | not implemented`);
+    const direction:Vector3 = new Vector3().subVectors( base.vect, aimAt.vect);
+    
+    // edge case; the base and aimAt are the same location. return null
+    if (direction.length() == 0.0) return null;
+    
+    const projDirection = direction.clone().setComponent(1, 0.0);
+    const projLength = projDirection.length();
+    
+    const [x_ang,y_ang]:[number,number] = ( () => {
+        if (projLength == 0.0)
+            if (direction.y > 0.0)
+                return [Math.PI/2,0.0];
+            else
+                return [-Math.PI/2, Math.PI];
+        return  [   Math.atan2(     direction.y,  projLength),
+                    Math.atan2(-projDirection.x, -projDirection.z)
+                ];
+    })();
+    return new Rotation(
+        new Quaternion().setFromEuler( new Euler(x_ang,y_ang,0.0,"YXZ") , false)
+    );
 }
