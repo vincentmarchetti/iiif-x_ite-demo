@@ -8,6 +8,7 @@ Then configures a handler to a custom event new_manifest fired from document
 */
 
 import {Manifest3DViewer} from "./Manifest3DViewer.js";
+import type {Manifest}    from "@kshell/manifesto-prezi4";
 
 const XITE_VIEW_CONTAINER="xite-view-container";
 const XITE_SHOWALL_BUTTON="xite-show-all";
@@ -32,7 +33,12 @@ export function initialize_x_ite_viewer(X3DLib:any){
             console.warn(`X-ITE setup: getElementById(\"${XITE_SHOWALL_BUTTON}\") failed`);
         else
             viewer.showAllButton = showAllButton;
-        await viewer.display( (event as any).detail.manifest );
+            
+        const manifest:unknown = (event as any).detail.manifest;
+        // sanity check
+        if (manifest == null ) throw new Error(`event.detail.manifest is null`);
+        if (typeof manifest != "object") throw new Error(`event.details.manifest is ${typeof manifest}`);
+        await viewer.display( manifest as Manifest);
     });    
     console.debug("Added X-ITE listener to document \"new_manifest\" event");
 }
