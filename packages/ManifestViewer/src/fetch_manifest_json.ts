@@ -2,7 +2,7 @@
 
 let MANIFEST_KEY : string = "manifest";
 export async function fetch_manifest_json(viewer_url_string : string ,
-                    fallback_manifest_url : string|null = null) : object | null {
+                    fallback_manifest_url : string|null = null) : Promise<object | null> {
     /**
     *  Not all webpages that show a IIIF manifest will use this
     *

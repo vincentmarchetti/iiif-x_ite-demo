@@ -18,5 +18,5 @@
         "strictNullChecks": true,
         "target": "es6"
     },
-    "include" : ["src/Manifest3DViewer.ts"]
+    "include" : ["src/index.ts"]
 }
