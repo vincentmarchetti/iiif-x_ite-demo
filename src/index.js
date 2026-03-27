@@ -16,7 +16,8 @@ import * as manifesto  from "@kshell/manifesto-prezi4" ;
         -- on user request when manifest text is entered or copied into HTML input
 */
 
-const FALLBACK_MANIFEST_URL="https://raw.githubusercontent.com/IIIF/3d/refs/heads/main/manifests/3_lights/multiple_lights_with_intensities_and_colors.json";
+const FALLBACK_MANIFEST_URL= "https://spri-open-resources.s3.us-east-2.amazonaws.com/iiif3dtsg/"
+                            +"manifests/BlenderPluginDemo_20251110/demo_v2.json";
 async function load_manifest(){
     const data = await ( async () => {
         try{
