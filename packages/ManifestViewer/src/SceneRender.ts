@@ -112,6 +112,7 @@ export class SceneRender {
     
     public constructor( scene : manifesto.Scene, manifest_render:IManifestRender){        
         this.manifest_render = manifest_render;
+        this.scene_properties = scene;
         
         if ( this.manifest_render.x3dLib == undefined ){
             throw new Error("global this.manifest_render.x3dLib not defined in SceneRender.constuctor");
@@ -136,7 +137,7 @@ export class SceneRender {
     SceneRender instance synchronously
     */
     public async render() : Promise<SceneHooks> {
-        console.debug( `enter SceneRende.render for scene ${this.scene_properties.id}`);
+        console.debug( `enter SceneRende.render for scene ${this.scene_properties?.id}`);
         
         /*
         scene_x is a constructed representation of the scenegraph int he X_ITE 
