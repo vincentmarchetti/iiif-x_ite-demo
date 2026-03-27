@@ -37,7 +37,7 @@ export interface SceneHooks {
 type AxesValues = manifesto.AxesValues; // rem: an array of 4 numbers
 
 
-function getTransformsForBody( resource : manifesto.JSONLDResource):Transform[] {
+function TransformsForBody( resource : manifesto.JSONLDResource):Transform[] {
     if ((resource as any).isSpecificResource ){
         /*
         Developer note Mar 23 2026
@@ -59,7 +59,7 @@ function getTransformsForBody( resource : manifesto.JSONLDResource):Transform[] 
             });
         }
         catch (error){
-            const msg = `SceneRender.getTransformsForBody | ${error}`;
+            const msg = `SceneRender.TransformsForBody | ${error}`;
             throw new Error(msg);
             // dev note 20260301: following is essentially "ignore bad input"
             // remove as cruft 1 April 2026
@@ -70,17 +70,15 @@ function getTransformsForBody( resource : manifesto.JSONLDResource):Transform[] 
     return ( [] as Transform[] );
 };
 
-function getTransformsForTarget( resource : manifesto.JSONLDResource):Transform[] {
+function TranslationForTarget( resource : manifesto.JSONLDResource):Translation {
     try{
 
     const selector = (( resource as any).isSpecificResource && 
-                        (resource as unknown as manifesto.SpecificResource).Selector) ?? null;    
-    return (( selector?.isPointSelector) && 
-            [ Transform.from_manifesto_transform(selector )]) ??
-            ( [] as Transform[] );
+                        (resource as manifesto.SpecificResource).Selector) ?? null;    
+    return  (selector?.isPointSelector && Transform.from_point_selector(selector)) ?? Translation.Identity;
     }
     catch (error){
-        const msg = `getTransformsForTarget.getTransformsForTarget | ${error}`;
+        const msg = `TranslationForTarget | ${error}`;
         throw new Error(msg);
     }
 };
@@ -253,8 +251,8 @@ export class SceneRender {
         const inline = this.createNode("Inline");
         inline.url = new this.manifest_render.x3dLib.MFString([ model.id ]);
             
-        const net_transforms =  [   ...getTransformsForBody(anno.Body),
-                                    ...getTransformsForTarget(anno.Target) ];
+        const net_transforms =  [   ...TransformsForBody(anno.Body),
+                                    TranslationForTarget(anno.Target) ];
                                     
         const placements = transformsToPlacements( net_transforms );
         
@@ -326,8 +324,8 @@ export class SceneRender {
                 
         const camera_placement:Placement = ( () => {
             const placements =  transformsToPlacements(
-                [   ...getTransformsForBody(anno.Body),
-                    ...getTransformsForTarget(anno.Target) ]);
+                [   ...TransformsForBody(anno.Body),
+                    TranslationForTarget(anno.Target) ]);
             if (placements.length > 1){
                 console.warn(`invalid transforms for Camera body`);
             }
@@ -337,42 +335,25 @@ export class SceneRender {
         
         const cameraLocation : Translation  =   camera_placement.translation;
             
-        const cameraOrientation: Rotation = ( ():Rotation => {
-            const lookAt = camera.LookAt;
+        const [cameraOrientation, cameraCenter]  = ( (lookAt):[Rotation, Translation] => {
             if (lookAt == null){
-                return camera_placement.rotation;
+                return [ camera_placement.rotation,TranslationForTarget(anno.Target)];
             }
             if ((lookAt as any).isPointSelector){
                 const lookAtLocation:Translation = 
-                Transform.from_point_selector( lookAt as manifesto.PointSelector);
-                
-                const tmp:Rotation|null = relativeRotation(cameraLocation, lookAtLocation);
-                if (tmp == null){
-                    const msg=`SceneRender.addCamera | unable to determine relative rotation`;
-                    throw new Error(msg);
-                }
-                return tmp as Rotation;
+                    Transform.from_point_selector( lookAt as manifesto.PointSelector);                
+                const camera_rotation = (():Rotation =>{
+                    const rvn = relativeRotation(cameraLocation, lookAtLocation);
+                    if (rvn == null)
+                        throw new Error(`SceneRender.addCamera : lookAt same place as camera`);
+                    return rvn as Rotation
+                })();
+                return [ camera_rotation, lookAtLocation];
             }
             const msg = `SceneRender.addCamera | unsupported lookAt resource`;
             throw new Error(msg);
         })();
         
-        const cameraCenter:Translation = ( () => {
-            const lookAt = camera.LookAt;
-            if (lookAt == null){
-                const placements =  
-                    transformsToPlacements(getTransformsForTarget(anno.Target));
-                if (placements.length > 1){
-                    console.warn(`invalid transforms for Camera body`);
-                }
-                return placements[0].translation;
-            }
-            if ((lookAt as any).isPointSelector){
-                return Transform.from_point_selector( lookAt as manifesto.PointSelector);
-            }
-            const msg = `SceneRender.addCamera | unsupported lookAt resource`;
-            throw new Error(msg);
-        })();
         
         const cameraNode = (() => {
             if (camera.isPerspectiveCamera){
