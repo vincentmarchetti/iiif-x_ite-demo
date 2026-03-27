@@ -71,6 +71,10 @@ export class Translation extends Transform {
         return true;
     }
     
+    static get Identity():Translation {
+        return new Translation( new Vector3(0,0,0));
+    }
+    
     applyToVector3( a:Vector3 ):Vector3{
         const rv = this.vect.clone().add(a);
         return rv;
