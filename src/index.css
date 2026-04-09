@@ -9,3 +9,8 @@ body * {margin-bottom:28;}
 #xite-control * {font-size:12pt;}
 
 .logo-image {height:64px; }
+
+input[type="checkbox"]{
+    scale: 1.5 1.5;
+    width:32px;
+}
