@@ -1,16 +1,26 @@
-body * {margin-bottom:28;}
 
-#main-title {font-size:14pt;}
+#main-title {font-size:20pt;}
 
-#xite-view-container {width:480px; aspect-ratio:  1/1 ;}
+#xite-view-container {width:680px; aspect-ratio:  5.5/4 ;}
 
 #xite-view-container x3d-canvas {width:100%; height:100%;}
 
-#xite-control * {font-size:12pt;}
+#xite-control {width:640px; height:32px; font-size:14pt; padding-left:20px;}
 
-.logo-image {height:64px; }
+/* id "headlight-on" is the Headlight checkbox */
+#headlight-on { scale: 2.00;
+                display: inline-block;
+                vertical-align: middle;  }
+label { font-size:14pt;
+        font-family:sans-serif;
+        display: inline-block;
+        vertical-align: middle;
+        margin-left:5px; }
 
-input[type="checkbox"]{
-    scale: 1.5 1.5;
-    width:32px;
-}
+/* id="xite-show-all" is the show all button */
+#xite-show-all {    margin-left:72px; 
+                    font-size:14pt; 
+                    height:32px; 
+                    border:solid black 2px; 
+                    border-radius:6px;
+                    background-color:#E0E0E0;}
