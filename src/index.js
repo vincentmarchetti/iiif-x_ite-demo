@@ -16,8 +16,9 @@ import * as manifesto  from "@kshell/manifesto-prezi4" ;
         -- on user request when manifest text is entered or copied into HTML input
 */
 
-const FALLBACK_MANIFEST_URL=    "https://iiif.io/api/presentation/4.0/" +
-                                "example/uc08_3d_comments_with_cameras.json";
+const FALLBACK_MANIFEST_URL=    "https://raw.githubusercontent.com/IIIF/3d/refs/heads/"+
+                                "main/manifests/10_activating_annotations/"+
+                                "whale_comment_activating_annotation.json";
 async function load_manifest(){
     const data = await ( async () => {
         try{
