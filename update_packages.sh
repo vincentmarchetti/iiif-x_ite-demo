@@ -7,7 +7,12 @@
 # is using a development branch of a subpackage
 
 for PACKNAME in manifesto-prezi4 x3d_transforms manifest_viewer ; do
-    git submodule update ./packages/$PACKNAME;
+    git submodule update --init ./packages/$PACKNAME;
+    {
+        pushd ./packages/$PACKNAME &&
+        npm install; 
+        popd;   
+    }
 done;
 
 sh ./build_packages.sh
