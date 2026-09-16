@@ -17,7 +17,7 @@ import * as manifesto  from "@kshell/manifesto-prezi4" ;
 */
 
 const FALLBACK_MANIFEST_URL= "https://raw.githubusercontent.com/IIIF/3d/main/manifests" +
-                                "/3_lights/direction_light_lookat_positioned.json";
+                                "/1_basic_model_in_scene/model_origin.json";
 async function load_manifest(){
     const data = await ( async () => {
         try{
