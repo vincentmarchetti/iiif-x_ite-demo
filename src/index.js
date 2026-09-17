@@ -17,7 +17,8 @@ import * as manifesto  from "@kshell/manifesto-prezi4" ;
 */
 
 const FALLBACK_MANIFEST_URL= "https://raw.githubusercontent.com/IIIF/3d/main/manifests" +
-                                "/1_basic_model_in_scene/model_origin.json";
+                                "/10_activating_annotations" +
+                                "/whale_comment_activating_annotation.json";
 async function load_manifest(){
     const data = await ( async () => {
         try{
